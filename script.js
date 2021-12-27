@@ -45,13 +45,15 @@ let viewLabel = document.createElement("label")
 viewLabel.htmlFor = "viewToggle"
 viewLabel.innerText = "User View"
 
-onlineBox.append(boxP, logoutBtn,viewLabel, viewToggle)
-header.append(onlineBox)
+onlineBox.append(viewLabel, viewToggle, boxP, logoutBtn)
+
 
 // -- CONTENT --/ 
+let contentContainer = document.createElement("div")
+contentContainer.id = "contentContainer"
 let h1 = document.createElement("h1")
 let p = document.createElement("p")
-main.append(h1, p)
+contentContainer.append(h1, p)
 
 window.addEventListener('load', initPage)
 
@@ -61,23 +63,41 @@ let onlineUser = []
 function initPage() {
     let onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
     let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
-    renderContent()
-    renderTheme(activeTheme)
+    setTheme(activeTheme)
 
-    console.log(onlineUser)
+    console.log(activeTheme)
 
-    if (onlineUser) {
-        loggedInPage()
+    if (onlineUser == null) {
+        startPage()
 
     } else {
-        notLoggedInPage();
+        adminPage()
     }
 } 
+
+// -- Page for not logged in users --/ 
+function startPage() {
+    header.append(loginForm)
+    renderContent()
+}
+
+let content = {
+    title: "PlaceHolder Header",
+    text: "This is some placeholder text lorem ipsum yada yada yada.."
+}
+
+localStorage.setItem("activeContent", JSON.stringify(content))
+
+function renderContent() {
+    let activeContent = JSON.parse(localStorage.getItem("activeContent"))
+    h1.innerText = activeContent.title
+    p.innerText = activeContent.text
+    main.append(contentContainer)
+}
 
 // -- GET STUFF FROM LOCAL STORAGE --/
 function getUsersFromLS() {
     let collectedUserList = localStorage.getItem("userList");
-
     let userList = []
 
     if(collectedUserList) {
@@ -108,52 +128,23 @@ function validateUser() {
 }
 
 // -- Page for logged in users -- /
-function loggedInPage() {
+function adminPage() {
     header.append(onlineBox)
     boxP.innerHTML = "You are now in admin mode"
-    boxP.style.color = "white"
-    themesList()
+    renderView()
 }
-
-function themesList(){
-    let existingThemes = JSON.parse(localStorage.getItem("themes"))
-    let themeList = document.createElement("select")
-    let themeBtn = document.createElement("button")
-    themeBtn.innerText = "Select theme"
-    themeList.placeholder = "Choose existing"
-
-    existingThemes.forEach((theme) => {
-        let selTheme = document.createElement("option")
-        selTheme.innerText = theme.themeName
-        themeList.append(selTheme)
-    })
-    main.append(themeList, themeBtn)
-
-    themeBtn.addEventListener("click", () => {
-        let chosenTheme = themeList.value
-
-        existingThemes.find((theme) => {
-            if(chosenTheme == theme.themeName){
-                setTheme(theme)
-                localStorage.setItem("activeTheme", JSON.stringify(theme))
-            }
-        })
-        console.log("clicked", chosenTheme)
-    })
-}
+viewToggle.addEventListener("change",renderView)
 
 // -- USER VIEW --/
-viewToggle.addEventListener("change", function(){
-    if(this.checked){
+function renderView(){
+    if(viewToggle.checked){
         userView()
+        //renderTestSettings()
     } else {
         adminView()
     }
-})
-
-function userView(){
-    console.log("checked box, inne i func")
 }
+
 
 Coloris({
     swatches: [
@@ -176,54 +167,104 @@ Coloris({
   });
 
   Coloris({
-    el: '.coloris'
+    el: '.Coloris'
   });
 
+  // -- EDIT SETTINGS -- / 
+let editSiteContainer = document.createElement("div")
+editSiteContainer.id = "editSiteContainer"
+editSiteContainer.innerHTML = "<h2>Customize theme</h2>"
+
+let newBackground = document.createElement("select")
+newBackground.className = "Coloris"
+
+let newTitle = document.createElement("input")
+
+let newText = document.createElement("input")
+  
+let newTitleColour = document.createElement("select")
+newTitleColour.className = "Coloris"
+
+let newTextColour = document.createElement("select")
+newTextColour.className = "Coloris"
+
+let saveBtn = document.createElement("button")
+saveBtn.innerText = "Save Changes"
+
+let newAccentColour = document.createElement("select")
+newTextColour.className = "Coloris"
+
+let newContrastColour = document.createElement("select")
+newTextColour.className = "Coloris"
+
+let themesDiv = document.createElement("div")
+
+editSiteContainer.append(newBackground, newTitle, newText, newTitleColour, newTextColour, saveBtn)
+
+/*function renderTestSettings(){
+    root.style.backgroundColor = newBackground.value;
+    h1.style.Color = newTitleColour.value;
+    p.style.Color = newTextColour.value;
+    header.style.backgroundColor = newAccentColour.value;
+    footer.style.backgroundColor = newAccentColour.value;
+    footer.style.Color = newContrastColour.value;
+}
+
+renderTestSettings()*/
+
+// -- ADMIN VIEW --/
 function adminView(){
-    let newTitle = document.createElement("input")
-    newTitle.placeholder = "new Title"
-    
-    let newText = document.createElement("input")
-    newText.placeholder = "new Text"
-
-    let newTitleColor = document.createElement("option")
-    newTitleColor.className = "coloris"
-
-    let newTextColor = document.createElement("option")
-    newTextColor.className = "coloris"
+    themesList()
+    let currentValues = JSON.parse(localStorage.getItem("activeContent"))
+    newTitle.value = currentValues.title
+    newText.value = currentValues.text
 
     // -- Change font for title -- /
-    let newFontTitle = document.createElement("select")
-
-    fonts.forEach((font) => {
-        let aFont = document.createElement("option")
-        aFont.innerText = font
-        newFontTitle.append(aFont)
-    })
-
+    /*let newFontTitle = document.createElement("select")
     let newFontText = document.createElement("select")
 
-    // -- Change font for text -- /
     fonts.forEach((font) => {
         let aFont = document.createElement("option")
         aFont.innerText = font
         newFontText.append(aFont)
+    })*/
+    main.append(editSiteContainer)
+}
+
+function userView(){
+    renderContent()
+    main.removeChild(editSiteContainer)
+}
+
+function themesList(){
+    let existingThemes = JSON.parse(localStorage.getItem("themes"))
+    let themeList = document.createElement("ul")
+    
+    existingThemes.forEach((theme) => {
+        let themeListTemplate = `
+        <li id="${theme.themeID}">
+        ${theme.themeName}
+        <div id="colorSwatch" style="background-color:${theme.accentColour}"></div>
+        </li>
+        `
+
+        themeList.insertAdjacentHTML("beforeend", themeListTemplate)
+
+        themeList.addEventListener("click", (evt) => {
+            existingThemes.find((theme) => {
+
+                if(evt.target.id == theme.themeID){
+                    setTheme(theme)
+                    localStorage.setItem("activeTheme", JSON.stringify(theme))
+                }
+            })
+        })
     })
-
-    main.append(newTitle, newFontTitle, newFontText, newTitleColor, newTextColor)
-    h1.style.visibility = "none"
-    p.style.visibility = "none"
-    console.log("not checked")
+    themesDiv.innerHTML = "<h2>Choose an existing theme</h2>"
+    themesDiv.append(themeList)
+    editSiteContainer.append(themesDiv)
 }
 
-function swatchColour() {
-    let colorSwatch = document.createElement("div")
-    colorSwatch.innerHTML = ""
-    colorSwatch.style.height = "1rem"
-    colorSwatch.style.width = "1rem"
-    colorSwatch.style.backgroundColor = newTitle.value
-    main.append(colorSwatch)
-}
 
 let fonts = [
     "Helvetica",
@@ -235,14 +276,8 @@ let fonts = [
 // -- LOG OUT  --/ 
 logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("onlineUser")
-    notLoggedInPage()
     location.reload()
 })
-
-// -- Page for not logged in users --/ 
-function notLoggedInPage() {
-    header.appendChild(loginForm)
-}
 
 
 // Arrays och logg till localStorage
@@ -257,22 +292,20 @@ let themes = [
     {
     themeID: 0, 
     themeName: "standardTheme",
-    backgroundColor: "white",
-    titleColor: "black",
-    textColor: "black",
-    headerBackground: "thistle",
-    footerBackground: "thistle",
-    footerTextColour: "white"
+    backgroundColour: "white",
+    titleColour: "black",
+    textColour: "black",
+    accentColour: "thistle",
+    accentTextColour: "white"
     },
     {
     themeID: 1, 
     themeName: "darkTheme",
     backgroundColour: "black",
-    titleColour: "white",
-    textColour: "white",
-    headerBackground: "black",
-    footerBackground: "black",
-    footerTextColour: "white"
+    titleColour: "black",
+    textColour: "black",
+    accentColour: "black",
+    accentTextColour: "white"
     },
     {
     themeID: 2, 
@@ -280,9 +313,8 @@ let themes = [
     backgroundColour: "white",
     titleColour: "black",
     textColour: "black",
-    headerBackground: "lightsteelblue",
-    footerBackground: "lightsteelblue",
-    footerTextColour: "black"
+    accentColour: "lightsteelblue",
+    accentTextColour: "black"
     },
     {
     themeID: 3, 
@@ -290,54 +322,40 @@ let themes = [
     backgroundColour: "cornflowerblue",
     titleColour: "black",
     textColour: "black",
-    headerBackground: "pink",
-    footerBackground: "pink",
-    footerTextColour: "black"
+    accentColour: "pink",
+    accentTextColour: "black"
     },
     {
     themeID: 4, 
     themeName: "purpleTheme",
-    backgroundColour: "mediumpurple",
-    titleColour: "white",
-    textColour: "white",
-    headerBackground: "rebeccapurple",
-    footerBackground: "rebeccapurple",
-    footerTextColour: "white"
+    backgroundColour: "purple",
+    titleColour: "black",
+    textColour: "black",
+    accentColour: "rgb(167, 145, 216)",
+    accentTextColour: "white"
     },
 ]
 
 localStorage.setItem("themes", JSON.stringify(themes))
 
 function setTheme(theme){
-    root.style.backgroundColor = theme.backgroundColor;
-    h1.style.color = theme.titleColor;
-    p.style.color = theme.textColor;
-    header.style.backgroundColor = theme.headerBackground;
-    footer.style.backgroundColor = theme.footerBackground;
-    footer.style.color = theme.footerTextColour;
+    h1.style.color = theme.titleColour;
+    p.style.color = theme.textColour;
+    header.style.backgroundColor = theme.accentColour;
+    footer.style.backgroundColor = theme.accentColour;
+    header.style.color = theme.accentTextColour;
+    footer.style.color = theme.accentTextColour;
 }
 
-function renderTheme(activeTheme){
-    root.style.backgroundColor = activeTheme.backgroundColor;
-    h1.style.color = activeTheme.titleColor;
-    p.style.color = activeTheme.textColor;
-    header.style.backgroundColor = activeTheme.headerBackground;
-    footer.style.backgroundColor = activeTheme.footerBackground;
-    footer.style.color = activeTheme.footerTextColour;
-}
-
-let content = {
-    title: "PlaceHolder Header",
-    text: "This is some placeholder text lorem ipsum yada yada yada.."
-}
-
-localStorage.setItem("activeContent", JSON.stringify(content))
-
-function renderContent() {
-    let activeContent = JSON.parse(localStorage.getItem("activeContent"))
-    h1.innerText = activeContent.title
-    p.innerText = activeContent.text
-}
+/*function renderTheme(){
+    let activeTheme = localStorage.getItem("activeTheme")
+    h1.style.color = activeTheme.titleColour;
+    p.style.color = activeTheme.textColour;
+    header.style.backgroundColor = activeTheme.accentColour;
+    footer.style.backgroundColor = activeTheme.accentColour;
+    header.style.color = activeTheme.accentTextColour;
+    footer.style.color = activeTheme.accentTextColour;
+}*/
 
 /*function changeContent(thing) {
     let newContent = {
