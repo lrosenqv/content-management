@@ -65,10 +65,9 @@ function initPage() {
     let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
     setTheme(activeTheme)
 
-    console.log(activeTheme)
-
     if (onlineUser == null) {
         startPage()
+        renderContent()
 
     } else {
         adminPage()
@@ -78,7 +77,6 @@ function initPage() {
 // -- Page for not logged in users --/ 
 function startPage() {
     header.append(loginForm)
-    renderContent()
 }
 
 let content = {
@@ -92,7 +90,7 @@ function renderContent() {
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
     h1.innerText = activeContent.title
     p.innerText = activeContent.text
-    main.append(contentContainer)
+    //main.append(contentContainer)
 }
 
 // -- GET STUFF FROM LOCAL STORAGE --/
@@ -107,7 +105,7 @@ function getUsersFromLS() {
 }
 
 // -- LOG IN & USER VALIDATION --/
-loginBtn.addEventListener('click', validateUser, true)
+loginBtn.addEventListener('click', validateUser)
 function validateUser() {
     let userList = getUsersFromLS();
     let userInput = userNameInput.value;
@@ -119,7 +117,7 @@ function validateUser() {
     if(validUser) {
         let onlineUser = {username: userInput, status: "online" }
         localStorage.setItem("onlineUser", JSON.stringify(onlineUser))
-        console.log("success!");
+        renderView()
 
     } else {
         loginForm.insertAdjacentText("afterend", "Username or password is incorrect")
@@ -133,15 +131,15 @@ function adminPage() {
     boxP.innerHTML = "You are now in admin mode"
     renderView()
 }
-viewToggle.addEventListener("change",renderView)
+
+viewToggle.addEventListener("change", renderView)
 
 // -- USER VIEW --/
 function renderView(){
-    if(viewToggle.checked){
-        userView()
-        //renderTestSettings()
-    } else {
+    if(viewToggle.checked == false){
         adminView()
+    } else {
+        userView()
     }
 }
 
@@ -175,49 +173,57 @@ let editSiteContainer = document.createElement("div")
 editSiteContainer.id = "editSiteContainer"
 editSiteContainer.innerHTML = "<h2>Customize theme</h2>"
 
-let newBackground = document.createElement("select")
-newBackground.className = "Coloris"
+/*let newBackground = document.createElement("select")
+newBackground.className = "Coloris"*/
 
 let newTitle = document.createElement("input")
+newTitle.type = "text"
 
 let newText = document.createElement("input")
   
-let newTitleColour = document.createElement("select")
+let newTitleColour = document.createElement("input")
 newTitleColour.className = "Coloris"
 
-let newTextColour = document.createElement("select")
+let newTextColour = document.createElement("input")
 newTextColour.className = "Coloris"
 
 let saveBtn = document.createElement("button")
 saveBtn.innerText = "Save Changes"
 
-let newAccentColour = document.createElement("select")
-newTextColour.className = "Coloris"
+let newAccentColour = document.createElement("input")
+newAccentColour.className = "Coloris"
 
-let newContrastColour = document.createElement("select")
-newTextColour.className = "Coloris"
+let newContrastColour = document.createElement("input")
+newContrastColour.className = "Coloris"
 
 let themesDiv = document.createElement("div")
 
-editSiteContainer.append(newBackground, newTitle, newText, newTitleColour, newTextColour, saveBtn)
-
-/*function renderTestSettings(){
-    root.style.backgroundColor = newBackground.value;
-    h1.style.Color = newTitleColour.value;
-    p.style.Color = newTextColour.value;
-    header.style.backgroundColor = newAccentColour.value;
-    footer.style.backgroundColor = newAccentColour.value;
-    footer.style.Color = newContrastColour.value;
-}
-
-renderTestSettings()*/
+editSiteContainer.append(newTitle, newText, newTitleColour, newTextColour, newAccentColour, newContrastColour, saveBtn)
 
 // -- ADMIN VIEW --/
 function adminView(){
     themesList()
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
+    let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
     newTitle.value = currentValues.title
     newText.value = currentValues.text
+    newTitleColour.value = currentTheme.titleColour
+    newTextColour.value = currentTheme.textColour
+    newAccentColour.value = currentTheme.accentColour
+    newContrastColour.value = currentTheme.accentTextColour
+
+    saveBtn.addEventListener("click", () => {
+        let changes = {
+            themeName: "customTheme",
+            backgroundColour: "white",
+            titleColour: newTitleColour.value,
+            textColour: newTextColour.value,
+            accentColour: newAccentColour.value,
+            accentTextColour: newContrastColour.value
+        }
+        localStorage.setItem("activeTheme", JSON.stringify(changes))
+        setTheme(changes)
+    })
 
     // -- Change font for title -- /
     /*let newFontTitle = document.createElement("select")
@@ -229,11 +235,22 @@ function adminView(){
         newFontText.append(aFont)
     })*/
     main.append(editSiteContainer)
+    main.removeChild(contentContainer)
 }
 
 function userView(){
-    renderContent()
     main.removeChild(editSiteContainer)
+    h1.innerHTML = newTitle.value
+    h1.style.color = newTitleColour.value
+    p.innerHTML = newText.value
+    p.style.color = newTextColour.value
+
+    header.style.backgroundColor = newAccentColour.value
+    footer.style.backgroundColor = newAccentColour.value
+    header.style.color = newContrastColour.value
+    footer.style.color = newContrastColour.value
+
+    main.append(contentContainer)
 }
 
 function themesList(){
