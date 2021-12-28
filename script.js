@@ -193,6 +193,8 @@ saveBtn.innerText = "Save Changes"
 
 editSiteContainer.append(newTitle, newText, newTitleColour, newTextColour, newAccentColour, newContrastColour, saveBtn)
 
+
+
 // -- ADMIN VIEW --/
 function adminView(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
@@ -245,15 +247,15 @@ function adminView(){
 function userView(){
     editSiteContainer.remove()
 
-    h1.innerHTML = newTitle.value
-    h1.style.color = newTitleColour.value
-    p.innerHTML = newText.value
-    p.style.color = newTextColour.value
+    h1.innerHTML = getValue(newTitle)
+    h1.style.color = getValue(newTitleColour)
+    p.innerHTML = getValue(newText)
+    p.style.color = getValue(newTextColour)
 
-    header.style.backgroundColor = newAccentColour.value
-    footer.style.backgroundColor = newAccentColour.value
-    header.style.color = newContrastColour.value
-    footer.style.color = newContrastColour.value
+    header.style.backgroundColor = getValue(newAccentColour)
+    footer.style.backgroundColor = getValue(newAccentColour)
+    header.style.color = getValue(newContrastColour)
+    footer.style.color = getValue(newContrastColour)
 
     viewToggle.innerText = "Admin View"
     viewToggle.removeEventListener("click", userView)
@@ -273,7 +275,6 @@ function themesList(){
         <div id="colorSwatch" style="background-color:${theme.accentColour}"></div>
         </li>
         `
-
         themeList.insertAdjacentHTML("beforeend", themeListTemplate)
     })
 
@@ -314,55 +315,9 @@ let mocklist = [
 ]
 localStorage.setItem("userList", JSON.stringify(mocklist))
 
-let themes = [
-    {
-    themeID: 0, 
-    themeName: "standardTheme",
-    backgroundColour: "white",
-    titleColour: "black",
-    textColour: "black",
-    accentColour: "thistle",
-    accentTextColour: "white"
-    },
-    {
-    themeID: 1, 
-    themeName: "darkTheme",
-    backgroundColour: "black",
-    titleColour: "black",
-    textColour: "black",
-    accentColour: "black",
-    accentTextColour: "white"
-    },
-    {
-    themeID: 2, 
-    themeName: "lightTheme",
-    backgroundColour: "white",
-    titleColour: "black",
-    textColour: "black",
-    accentColour: "lightsteelblue",
-    accentTextColour: "black"
-    },
-    {
-    themeID: 3, 
-    themeName: "vibrantTheme",
-    backgroundColour: "cornflowerblue",
-    titleColour: "black",
-    textColour: "black",
-    accentColour: "pink",
-    accentTextColour: "black"
-    },
-    {
-    themeID: 4, 
-    themeName: "purpleTheme",
-    backgroundColour: "purple",
-    titleColour: "black",
-    textColour: "black",
-    accentColour: "rgb(167, 145, 216)",
-    accentTextColour: "white"
-    },
-]
+/*let themes = 
 
-localStorage.setItem("themes", JSON.stringify(themes))
+localStorage.setItem("themes", JSON.stringify(themes))*/
 
 function setTheme(theme){
     h1.style.color = theme.titleColour;
@@ -371,4 +326,50 @@ function setTheme(theme){
     footer.style.backgroundColor = theme.accentColour;
     header.style.color = theme.accentTextColour;
     footer.style.color = theme.accentTextColour;
+}
+
+
+async function fetchJSON(url){
+    try{
+        let response = await fetch(url)
+        console.log(response)
+        let result = response.json()
+        console.log(result);
+        return result
+    } catch(err){
+        console.error(err)
+    }
+}
+
+let testBtn = document.createElement("button")
+testBtn.innerText = "testknapp"
+
+let testInput = document.createElement("input")
+testInput.type = "text"
+
+footer.append(testBtn, testInput)
+
+async function test() {
+    let themesT = await fetchJSON("./json/themes.json")
+    console.log(themesT)
+
+    testBtn.addEventListener("click", () => {
+        let hej = getValue(testInput)
+        console.log(hej);
+
+        /*let themeChangesT = {
+            "hej": testInput.value
+        }
+        console.log("klick", themeChangesT)
+        themesT.push(themeChangesT)
+        console.log(themesT)*/
+    })
+
+    
+}
+
+test()
+
+function getValue(input){
+    return input.value
 }

@@ -1,0 +1,7 @@
+[
+    {"themeID": 0, "themeName": "standardTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "thistle","accenttextColour": "white"},
+    {"themeID": 1, "themeName": "darkTheme","backgroundColour": "black","titleColour": "black","textColour": "black","accentColour": "black","accenttextColour": "white"},
+    {"themeID": 2, "themeName": "lightTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "lightsteelblue","accenttextColour": "black"},
+    {"themeID": 3, "themeName": "vibrantTheme","backgroundColour": "cornflowerblue","titleColour": "black","textColour": "black","accentColour": "pink","accentTextColour": "black"},
+    {"themeID": 4, "themeName": "purpleTheme","backgroundColour": "purple","titleColour": "black","textColour": "black","accentColour": "rgb(167, 145, 216)","accenttextColour": "white"}
+]
