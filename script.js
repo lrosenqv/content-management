@@ -37,15 +37,10 @@ let logoutBtn = document.createElement("button")
 logoutBtn.innerHTML = "Log out"
 logoutBtn.id = "logoutBtn"
 
-let viewToggle = document.createElement("input")
-viewToggle.type = "checkbox"
+let viewToggle = document.createElement("button")
 viewToggle.id = "viewToggle"
 
-let viewLabel = document.createElement("label")
-viewLabel.htmlFor = "viewToggle"
-viewLabel.innerText = "User View"
-
-onlineBox.append(viewLabel, viewToggle, boxP, logoutBtn)
+onlineBox.append(boxP, viewToggle, logoutBtn)
 
 
 // -- CONTENT --/ 
@@ -79,18 +74,29 @@ function startPage() {
     header.append(loginForm)
 }
 
-let content = {
-    title: "PlaceHolder Header",
-    text: "This is some placeholder text lorem ipsum yada yada yada.."
-}
-
-localStorage.setItem("activeContent", JSON.stringify(content))
-
 function renderContent() {
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
+
+    if(activeContent.title == "") {
+        let placeholderContent = {
+            title: "PlaceHolder Header",
+            text: activeContent.text
+        }
+        localStorage.setItem("activeContent", JSON.stringify(placeholderContent))
+    }
+
+    if(activeContent.text == "") {
+        let placeholderContent = {
+            title: activeContent.title,
+            text: "PlaceHolder Text"
+        }
+        localStorage.setItem("activeContent", JSON.stringify(placeholderContent))
+    }
+
     h1.innerText = activeContent.title
     p.innerText = activeContent.text
-    //main.append(contentContainer)
+
+    main.append(contentContainer)
 }
 
 // -- GET STUFF FROM LOCAL STORAGE --/
@@ -117,7 +123,7 @@ function validateUser() {
     if(validUser) {
         let onlineUser = {username: userInput, status: "online" }
         localStorage.setItem("onlineUser", JSON.stringify(onlineUser))
-        renderView()
+        adminPage()
 
     } else {
         loginForm.insertAdjacentText("afterend", "Username or password is incorrect")
@@ -129,20 +135,9 @@ function validateUser() {
 function adminPage() {
     header.append(onlineBox)
     boxP.innerHTML = "You are now in admin mode"
-    renderView()
+    viewToggle.innerText = "User View"
+    adminView()
 }
-
-viewToggle.addEventListener("change", renderView)
-
-// -- USER VIEW --/
-function renderView(){
-    if(viewToggle.checked == false){
-        adminView()
-    } else {
-        userView()
-    }
-}
-
 
 Coloris({
     swatches: [
@@ -173,8 +168,8 @@ let editSiteContainer = document.createElement("div")
 editSiteContainer.id = "editSiteContainer"
 editSiteContainer.innerHTML = "<h2>Customize theme</h2>"
 
-/*let newBackground = document.createElement("select")
-newBackground.className = "Coloris"*/
+let themesDiv = document.createElement("div")
+themesDiv.id = "themesDiv"
 
 let newTitle = document.createElement("input")
 newTitle.type = "text"
@@ -187,24 +182,22 @@ newTitleColour.className = "Coloris"
 let newTextColour = document.createElement("input")
 newTextColour.className = "Coloris"
 
-let saveBtn = document.createElement("button")
-saveBtn.innerText = "Save Changes"
-
 let newAccentColour = document.createElement("input")
 newAccentColour.className = "Coloris"
 
 let newContrastColour = document.createElement("input")
 newContrastColour.className = "Coloris"
 
-let themesDiv = document.createElement("div")
+let saveBtn = document.createElement("button")
+saveBtn.innerText = "Save Changes"
 
 editSiteContainer.append(newTitle, newText, newTitleColour, newTextColour, newAccentColour, newContrastColour, saveBtn)
 
 // -- ADMIN VIEW --/
 function adminView(){
-    themesList()
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
     let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
+
     newTitle.value = currentValues.title
     newText.value = currentValues.text
     newTitleColour.value = currentTheme.titleColour
@@ -212,8 +205,10 @@ function adminView(){
     newAccentColour.value = currentTheme.accentColour
     newContrastColour.value = currentTheme.accentTextColour
 
+    themesList()
+
     saveBtn.addEventListener("click", () => {
-        let changes = {
+        let themeChanges = {
             themeName: "customTheme",
             backgroundColour: "white",
             titleColour: newTitleColour.value,
@@ -221,8 +216,14 @@ function adminView(){
             accentColour: newAccentColour.value,
             accentTextColour: newContrastColour.value
         }
-        localStorage.setItem("activeTheme", JSON.stringify(changes))
-        setTheme(changes)
+
+        let contentChanges = {
+            title: newTitle.value,
+            text: newText.value
+        }
+        localStorage.setItem("activeTheme", JSON.stringify(themeChanges))
+        setTheme(themeChanges)
+        localStorage.setItem("activeContent", JSON.stringify(contentChanges))
     })
 
     // -- Change font for title -- /
@@ -235,11 +236,15 @@ function adminView(){
         newFontText.append(aFont)
     })*/
     main.append(editSiteContainer)
-    main.removeChild(contentContainer)
+    contentContainer.remove()
+
+    viewToggle.innerText = "User View"
+    viewToggle.addEventListener("click", userView)
 }
 
 function userView(){
-    main.removeChild(editSiteContainer)
+    editSiteContainer.remove()
+
     h1.innerHTML = newTitle.value
     h1.style.color = newTitleColour.value
     p.innerHTML = newText.value
@@ -249,6 +254,10 @@ function userView(){
     footer.style.backgroundColor = newAccentColour.value
     header.style.color = newContrastColour.value
     footer.style.color = newContrastColour.value
+
+    viewToggle.innerText = "Admin View"
+    viewToggle.removeEventListener("click", userView)
+    viewToggle.addEventListener("click", adminView)
 
     main.append(contentContainer)
 }
@@ -266,36 +275,36 @@ function themesList(){
         `
 
         themeList.insertAdjacentHTML("beforeend", themeListTemplate)
+    })
 
-        themeList.addEventListener("click", (evt) => {
-            existingThemes.find((theme) => {
+    themeList.addEventListener("click", (evt) => {
+        existingThemes.find((theme) => {
 
-                if(evt.target.id == theme.themeID){
-                    setTheme(theme)
-                    localStorage.setItem("activeTheme", JSON.stringify(theme))
-                }
-            })
+            if(evt.target.id == theme.themeID){
+                setTheme(theme)
+                location.reload()
+                localStorage.setItem("activeTheme", JSON.stringify(theme))
+            }
         })
+        console.log(evt.target.id);
     })
     themesDiv.innerHTML = "<h2>Choose an existing theme</h2>"
     themesDiv.append(themeList)
-    editSiteContainer.append(themesDiv)
+    main.append(themesDiv)
 }
-
 
 let fonts = [
     "Helvetica",
     "Arial",
     "Times New Roman",
+    "Courier New"
 ]
-
 
 // -- LOG OUT  --/ 
 logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("onlineUser")
     location.reload()
 })
-
 
 // Arrays och logg till localStorage
 let userList = []
@@ -363,21 +372,3 @@ function setTheme(theme){
     header.style.color = theme.accentTextColour;
     footer.style.color = theme.accentTextColour;
 }
-
-/*function renderTheme(){
-    let activeTheme = localStorage.getItem("activeTheme")
-    h1.style.color = activeTheme.titleColour;
-    p.style.color = activeTheme.textColour;
-    header.style.backgroundColor = activeTheme.accentColour;
-    footer.style.backgroundColor = activeTheme.accentColour;
-    header.style.color = activeTheme.accentTextColour;
-    footer.style.color = activeTheme.accentTextColour;
-}*/
-
-/*function changeContent(thing) {
-    let newContent = {
-        title: thing.value,
-        text: thing.value
-    }
-    localStorage.setItem("activeContent", JSON.stringify(newContent))
-}*/

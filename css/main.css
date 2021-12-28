@@ -2,9 +2,11 @@
 
 header { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: end; -ms-flex-pack: end; justify-content: flex-end; background-color: thistle; position: relative; height: 4rem; font-size: 0.8rem; }
 
-header #onlineBox { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; margin-right: 3rem; -ms-flex-pack: distribute; justify-content: space-around; width: 15rem; }
+header #onlineBox { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; margin-right: 3rem; -ms-flex-pack: distribute; justify-content: space-around; width: 25rem; }
 
-header #onlineBox #viewToggle { border: none; width: 5rem; height: 2rem; background-color: cadetblue; padding: 0.2rem; cursor: pointer; }
+header #onlineBox #viewToggle { border: none; width: 6rem; height: 2rem; background-color: #585858; color: white; border-radius: 8px; padding: 0.2rem; cursor: pointer; }
+
+header #onlineBox #viewToggle:hover { background-color: #333333; }
 
 header #onlineBox #logoutBtn { height: 2rem; width: 5rem; border: none; border-radius: 8px; background-color: #af4747; color: white; cursor: pointer; }
 
@@ -16,27 +18,35 @@ header #loginForm #loginBtn { border: none; background-color: #7e5894; color: wh
 
 header #loginForm #loginBtn:hover { background-color: #573d66; }
 
-main { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; text-align: center; }
+main { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -ms-flex-line-pack: center; align-content: center; text-align: center; height: 80%; position: relative; }
 
-main p { padding: 0 8rem; }
+main #editSiteContainer { z-index: 2; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+
+main #editSiteContainer input { width: 15rem; }
+
+main #editSiteContainer select { width: 7rem; }
+
+main #editSiteContainer button { width: 8rem; }
+
+main #themesDiv { padding-top: 6rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; z-index: 1; }
+
+main #themesDiv h2 { margin-top: 0; }
+
+main #themesDiv ul { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; padding: 0; width: 60%; }
+
+main #themesDiv ul li { display: -webkit-box; display: -ms-flexbox; display: flex; padding: 0.6rem; cursor: pointer; }
+
+main #themesDiv ul li:focus { border: 1px solid black; }
+
+main #themesDiv ul li #colorSwatch { width: 1rem; height: 1rem; }
+
+main #contentContainer { height: 100%; width: 100vw; background-color: white; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; position: absolute; top: 0; z-index: 999; }
+
+main #contentContainer h1 { margin-top: 0; }
+
+main #contentContainer p { padding: 0 8rem; }
 
 footer { text-align: center; padding: 3rem; background-color: thistle; }
-
-#editSiteContainer { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
-
-#editSiteContainer input { width: 15rem; }
-
-#editSiteContainer select { width: 7rem; }
-
-#editSiteContainer button { width: 8rem; }
-
-#editSiteContainer ul { display: -webkit-box; display: -ms-flexbox; display: flex; }
-
-#editSiteContainer ul li { display: -webkit-box; display: -ms-flexbox; display: flex; padding: 0.6rem; cursor: pointer; }
-
-#editSiteContainer ul li:focus { border: 1px solid black; }
-
-#editSiteContainer ul li #colorSwatch { width: 1rem; height: 1rem; }
 
 .coloris { width: 4rem; height: 1.5rem; background-color: white; }
 /*# sourceMappingURL=main.css.map */
