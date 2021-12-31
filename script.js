@@ -164,14 +164,19 @@ Coloris({
   });
 
   // -- EDIT SETTINGS -- / 
-let editSiteContainer = document.createElement("div")
-editSiteContainer.id = "editSiteContainer"
-editSiteContainer.innerHTML = "<h2>Customize theme</h2>"
+let editContentContainer = document.createElement("div")
+editContentContainer.id = "editSiteContainer"
+editContentContainer.innerHTML = "<h2>Change Content</h2>"
+
+let editThemeContainer = document.createElement("div")
+editThemeContainer.id = "editThemeContainer"
+editThemeContainer.innerHTML = "<h2>Customize Theme</h2>"
 
 let themesDiv = document.createElement("div")
 themesDiv.id = "themesDiv"
 
 let newTitle = document.createElement("input")
+newTitle.id = "newTitle"
 newTitle.type = "text"
 
 let newText = document.createElement("input")
@@ -191,9 +196,15 @@ newContrastColour.className = "Coloris"
 let saveBtn = document.createElement("button")
 saveBtn.innerText = "Save Changes"
 
-editSiteContainer.append(newTitle, newText, newTitleColour, newTextColour, newAccentColour, newContrastColour, saveBtn)
+editContentContainer.append(newTitle, newText)
+editThemeContainer.append(newTitleColour, newTextColour, newAccentColour, newContrastColour, saveBtn)
 
-
+newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
+newText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Text</h3>")
+newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
+newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
+newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
+newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
 
 // -- ADMIN VIEW --/
 function adminView(){
@@ -237,7 +248,7 @@ function adminView(){
         aFont.innerText = font
         newFontText.append(aFont)
     })*/
-    main.append(editSiteContainer)
+    main.append(editContentContainer, editThemeContainer)
     contentContainer.remove()
 
     viewToggle.innerText = "User View"
@@ -245,7 +256,8 @@ function adminView(){
 }
 
 function userView(){
-    editSiteContainer.remove()
+    editContentContainer.remove()
+    editThemeContainer.remove()
 
     h1.innerHTML = getValue(newTitle)
     h1.style.color = getValue(newTitleColour)

@@ -21,6 +21,6 @@ newContrastColour.className = "Coloris"
 let saveBtn = document.createElement("button")
 saveBtn.innerText = "Save Changes"
 
-export function newInputValue(newText){
-    return newText.value
+export function newInputValue(input){
+    return input.value
 }
