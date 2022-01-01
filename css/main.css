@@ -1,34 +1,60 @@
 #root { display: -webkit-box; display: -ms-flexbox; display: flex; position: relative; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; font-family: Arial, Helvetica, sans-serif; height: 100vh; z-index: 1; }
 
-header { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: end; -ms-flex-pack: end; justify-content: flex-end; background-color: thistle; position: relative; height: 4rem; font-size: 0.8rem; }
+#root button { border: none; border-radius: 8px; padding: 0.5rem; cursor: pointer; }
 
-header #onlineBox { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; margin-right: 3rem; -ms-flex-pack: distribute; justify-content: space-around; width: 25rem; }
+header { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: end; -ms-flex-pack: end; justify-content: flex-end; background-color: thistle; font-size: 0.8rem; padding: 1rem 0; }
 
-header #onlineBox #viewToggle { border: none; width: 6rem; height: 2rem; background-color: #585858; color: white; border-radius: 8px; padding: 0.2rem; cursor: pointer; }
+header #loginForm { -ms-flex-item-align: center; align-self: center; display: -webkit-box; display: -ms-flexbox; display: flex; margin-right: 3rem; -ms-flex-pack: distribute; justify-content: space-around; }
 
-header #onlineBox #viewToggle:hover { background-color: #333333; }
+header #loginForm input { margin-right: 0.6rem; }
 
-header #onlineBox #logoutBtn { height: 2rem; width: 5rem; border: none; border-radius: 8px; background-color: #af4747; color: white; cursor: pointer; }
-
-header #onlineBox #logoutBtn:hover { background-color: #8a3535; }
-
-header #loginForm { -ms-flex-item-align: center; align-self: center; position: absolute; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-pack: distribute; justify-content: space-around; z-index: 2; }
-
-header #loginForm #loginBtn { border: none; background-color: #7e5894; color: white; border-radius: 8px; width: 4.5rem; height: 2rem; padding: 0.2rem, 0.5rem; cursor: pointer; }
+header #loginForm #loginBtn { background-color: #7e5894; color: white; }
 
 header #loginForm #loginBtn:hover { background-color: #573d66; }
 
-main { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -ms-flex-line-pack: center; align-content: center; text-align: center; height: 80%; position: relative; }
+header #onlineBox { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-column-gap: 1rem; column-gap: 1rem; -webkit-box-align: center; -ms-flex-align: center; align-items: center; margin-right: 3rem; -ms-flex-pack: distribute; justify-content: space-around; }
 
-main #editSiteContainer { z-index: 2; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+header #onlineBox #viewToggle { background-color: #585858; color: white; }
 
-main #editSiteContainer input { width: 15rem; }
+header #onlineBox #viewToggle:hover { background-color: #333333; }
 
-main #editSiteContainer select { width: 7rem; }
+header #onlineBox #logoutBtn { background-color: #af4747; color: white; }
 
-main #editSiteContainer button { width: 8rem; }
+header #onlineBox #logoutBtn:hover { background-color: #8a3535; }
 
-main #themesDiv { padding-top: 6rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; z-index: 1; }
+main { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -ms-flex-line-pack: center; align-content: center; text-align: center; position: relative; }
+
+main #editContentContainer { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-column-gap: 1rem; column-gap: 1rem; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; width: 100vw; }
+
+main #editContentContainer h2 { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; width: 100%; }
+
+main #editContentContainer h3 { width: 28vw; text-align: end; font-size: 1rem; -ms-flex-item-align: start; align-self: flex-start; }
+
+main #editContentContainer #newTextH3 { margin-top: 0; }
+
+main #editContentContainer input { width: 26.3rem; margin-right: 30%; }
+
+main #editContentContainer textarea { margin-right: 30%; }
+
+main #editContentContainer #saveContentBtn { width: 8rem; margin: 1.5rem 10rem; }
+
+main #editThemeContainer { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-column-gap: 1rem; column-gap: 1rem; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; width: 100vw; }
+
+main #editThemeContainer h2 { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; width: 100%; }
+
+main #editThemeContainer h3 { width: 40vw; text-align: end; font-size: 1rem; }
+
+main #editThemeContainer select { width: 11rem; margin-right: 30%; }
+
+main #editThemeContainer input { margin-right: 30%; }
+
+main #editThemeContainer button { width: 8rem; }
+
+main #editThemeContainer #saveEditsBtn { width: 8rem; margin-left: 4rem; }
+
+main #editThemeContainer #saveThemeBtn { width: 8rem; margin-right: 4rem; }
+
+main #themesDiv { padding-top: 2rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; z-index: 1; margin: 2rem 20rem; }
 
 main #themesDiv h2 { margin-top: 0; }
 

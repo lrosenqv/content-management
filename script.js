@@ -27,11 +27,10 @@ loginBtn.id = "loginBtn"
 
 loginForm.append(userNameInput, passwordInput, loginBtn)
 
-// -- ONLINE BOX --/
+// -- BOX THAT REPLACES LOGIN FORM WHEN LOGGED IN --/
 let onlineBox = document.createElement("div")
 onlineBox.id = "onlineBox"
-
-let boxP = document.createElement("p")
+onlineBox.insertAdjacentHTML("afterbegin", "<p>You are now logged in as admin</p>")
 
 let logoutBtn = document.createElement("button")
 logoutBtn.innerHTML = "Log out"
@@ -40,7 +39,7 @@ logoutBtn.id = "logoutBtn"
 let viewToggle = document.createElement("button")
 viewToggle.id = "viewToggle"
 
-onlineBox.append(boxP, viewToggle, logoutBtn)
+onlineBox.append(viewToggle, logoutBtn)
 
 
 // -- CONTENT --/ 
@@ -57,26 +56,31 @@ let onlineUser = []
 // -- WHEN LOADING PAGE --/
 function initPage() {
     let onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
-    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
-    setTheme(activeTheme)
+    //let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
+    //setTheme(activeTheme)
+    renderContent()
 
-    if (onlineUser == null) {
+    /*if (onlineUser == null) {
         startPage()
-        renderContent()
 
     } else {
         adminPage()
-    }
+    }*/
 } 
+
+function checkForATheme(){
+    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
+    console.log(activeTheme)
+}
 
 // -- Page for not logged in users --/ 
 function startPage() {
     header.append(loginForm)
 }
 
-function renderContent() {
+function checkContent(){
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
-
+    
     if(activeContent.title == "") {
         let placeholderContent = {
             title: "PlaceHolder Header",
@@ -92,10 +96,13 @@ function renderContent() {
         }
         localStorage.setItem("activeContent", JSON.stringify(placeholderContent))
     }
+}
+
+// -- RENDER CONTENT ON SITE --/
+function renderContent() {
 
     h1.innerText = activeContent.title
     p.innerText = activeContent.text
-
     main.append(contentContainer)
 }
 
@@ -134,11 +141,12 @@ function validateUser() {
 // -- Page for logged in users -- /
 function adminPage() {
     header.append(onlineBox)
-    boxP.innerHTML = "You are now in admin mode"
     viewToggle.innerText = "User View"
     adminView()
 }
 
+
+// -- COLOR PICKER --/
 Coloris({
     swatches: [
       '#264653',
@@ -153,33 +161,42 @@ Coloris({
       '#00b4d8',
       '#48cae4',
     ]
-  });
+});
 
-  Coloris({
+Coloris({
     format: 'hex',
-  });
+});
 
-  Coloris({
+Coloris({
     el: '.Coloris'
-  });
+});
 
-  // -- EDIT SETTINGS -- / 
+
+// -- CREATING EDIT CONTENT FORM ELEMENTS -- / 
 let editContentContainer = document.createElement("div")
-editContentContainer.id = "editSiteContainer"
+editContentContainer.id = "editContentContainer"
 editContentContainer.innerHTML = "<h2>Change Content</h2>"
 
+let newTitle = document.createElement("input")
+newTitle.id = "newTitle"
+newTitle.type = "text"
+
+let newText = document.createElement("textarea")
+newText.cols = 50
+newText.rows = 10
+newText.id = "newText"
+
+let saveContentBtn = document.createElement("button")
+saveContentBtn.innerText = "Save Content"
+saveContentBtn.id = "saveContentBtn"
+
+// -- CREATING EDIT THEME ETC. FORM ELEMENTS -- /
 let editThemeContainer = document.createElement("div")
 editThemeContainer.id = "editThemeContainer"
 editThemeContainer.innerHTML = "<h2>Customize Theme</h2>"
 
 let themesDiv = document.createElement("div")
 themesDiv.id = "themesDiv"
-
-let newTitle = document.createElement("input")
-newTitle.id = "newTitle"
-newTitle.type = "text"
-
-let newText = document.createElement("input")
   
 let newTitleColour = document.createElement("input")
 newTitleColour.className = "Coloris"
@@ -193,18 +210,66 @@ newAccentColour.className = "Coloris"
 let newContrastColour = document.createElement("input")
 newContrastColour.className = "Coloris"
 
-let saveBtn = document.createElement("button")
-saveBtn.innerText = "Save Changes"
+let saveEditsBtn = document.createElement("button")
+saveEditsBtn.innerText = "Save Edits"
+saveEditsBtn.id = "saveEditsBtn"
 
-editContentContainer.append(newTitle, newText)
-editThemeContainer.append(newTitleColour, newTextColour, newAccentColour, newContrastColour, saveBtn)
+let saveThemeBtn = document.createElement("button")
+saveThemeBtn.innerText = "Save as Theme"
+saveThemeBtn.id = "saveThemeBtn"
+
+// -- Change font for title -- /
+let newFontTitle = document.createElement("select")
+let newFontText = document.createElement("select")
+
+// -- ARRAY WITH FONTS TO CHOOSE FROM --/
+let fonts = [
+    "Helvetica",
+    "Arial",
+    "Times New Roman",
+    "Courier New"
+]
+
+// -- CREATING SELECT ELEMENTS FOR SELECTING FONT --/
+fonts.forEach((font) => {
+    let aFont = document.createElement("option")
+    aFont.innerText = font
+    newFontTitle.append(aFont)
+})
+
+fonts.forEach((font) => {
+    let aFont = document.createElement("option")
+    aFont.innerText = font
+    newFontText.append(aFont)
+})
+
+// -- APPEND RIGHT ELEMENTS TO RIGHT DIV --/
+editContentContainer.append(newTitle, newText, saveContentBtn)
+editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn)
+
+newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
+//newFontTitle.insertAdjacentHTML("afterend", "<button id='newFontBtn'>Edit</button>")
 
 newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
-newText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Text</h3>")
+//newTitle.insertAdjacentHTML("afterend", "<button id='newTitleBtn'>Edit</button>")
+
+newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
+//newFontText.insertAdjacentHTML("afterend", "<button id='newFontTextBtn'>Edit</button>")
+
+newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
+//newText.insertAdjacentHTML("afterend", "<button id='NewTextBtn'>Edit</button>")
+
 newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
+//newTitleColour.insertAdjacentHTML("afterend", "<button id='newTitleCoBtn'>Edit</button>")
+
 newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
+//newTextColour.insertAdjacentHTML("afterend", "<button id='newTextCoBtn'>Edit</button>")
+
 newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
+//newAccentColour.insertAdjacentHTML("afterend", "<button id='newAccCoBtn'>Edit</button>")
+
 newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
+//newContrastColour.insertAdjacentHTML("afterend", "<button id='newContrastCoBtn'>Edit</button>")
 
 // -- ADMIN VIEW --/
 function adminView(){
@@ -220,7 +285,7 @@ function adminView(){
 
     themesList()
 
-    saveBtn.addEventListener("click", () => {
+    saveEditsBtn.addEventListener("click", () => {
         let themeChanges = {
             themeName: "customTheme",
             backgroundColour: "white",
@@ -239,15 +304,6 @@ function adminView(){
         localStorage.setItem("activeContent", JSON.stringify(contentChanges))
     })
 
-    // -- Change font for title -- /
-    /*let newFontTitle = document.createElement("select")
-    let newFontText = document.createElement("select")
-
-    fonts.forEach((font) => {
-        let aFont = document.createElement("option")
-        aFont.innerText = font
-        newFontText.append(aFont)
-    })*/
     main.append(editContentContainer, editThemeContainer)
     contentContainer.remove()
 
@@ -255,6 +311,7 @@ function adminView(){
     viewToggle.addEventListener("click", userView)
 }
 
+// -- VIEW TO SHOW ALL THEME AND CONTENT EDITS --/
 function userView(){
     editContentContainer.remove()
     editThemeContainer.remove()
@@ -276,6 +333,7 @@ function userView(){
     main.append(contentContainer)
 }
 
+// -- LIST OF PRESET & SAVED THEMES --/
 function themesList(){
     let existingThemes = JSON.parse(localStorage.getItem("themes"))
     let themeList = document.createElement("ul")
@@ -303,15 +361,8 @@ function themesList(){
     })
     themesDiv.innerHTML = "<h2>Choose an existing theme</h2>"
     themesDiv.append(themeList)
-    main.append(themesDiv)
+    editThemeContainer.append(themesDiv)
 }
-
-let fonts = [
-    "Helvetica",
-    "Arial",
-    "Times New Roman",
-    "Courier New"
-]
 
 // -- LOG OUT  --/ 
 logoutBtn.addEventListener("click", () => {
@@ -327,20 +378,19 @@ let mocklist = [
 ]
 localStorage.setItem("userList", JSON.stringify(mocklist))
 
-/*let themes = 
-
-localStorage.setItem("themes", JSON.stringify(themes))*/
-
+// -- SET THEME --/ 
 function setTheme(theme){
     h1.style.color = theme.titleColour;
+    h1.style.fontFamily = theme.titleFont;
     p.style.color = theme.textColour;
+    p.style.fontFamily = theme.textFont;
     header.style.backgroundColor = theme.accentColour;
     footer.style.backgroundColor = theme.accentColour;
     header.style.color = theme.accentTextColour;
     footer.style.color = theme.accentTextColour;
 }
 
-
+// -- FETCH JSON --//
 async function fetchJSON(url){
     try{
         let response = await fetch(url)
@@ -352,7 +402,14 @@ async function fetchJSON(url){
         console.error(err)
     }
 }
+getThemes()
+// -- SET THEMES OF JSON IN LS --/
+async function getThemes(){
+    let themes = await fetchJSON("./json/themes.json")
+    localStorage.setItem("themes", JSON.stringify(themes))
+}
 
+// -- TESTING -- /
 let testBtn = document.createElement("button")
 testBtn.innerText = "testknapp"
 
@@ -361,7 +418,7 @@ testInput.type = "text"
 
 footer.append(testBtn, testInput)
 
-async function test() {
+/*async function test() {
     let themesT = await fetchJSON("./json/themes.json")
     console.log(themesT)
 
@@ -369,19 +426,18 @@ async function test() {
         let hej = getValue(testInput)
         console.log(hej);
 
-        /*let themeChangesT = {
+        let themeChangesT = {
             "hej": testInput.value
         }
         console.log("klick", themeChangesT)
         themesT.push(themeChangesT)
-        console.log(themesT)*/
+        console.log(themesT)
     })
-
-    
-}
+} 
 
 test()
 
 function getValue(input){
     return input.value
 }
+*/
