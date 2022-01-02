@@ -104,7 +104,6 @@ themesDiv.id = "themesDiv"
 
 let themeList = document.createElement("ul")
 themeList.id = "themeList"
-themeList.innerText = ""
 
 // -- Select-input fields for changing fonts -- /
 let newFontTitle = document.createElement("select")
@@ -236,7 +235,6 @@ async function checkTheme(){
 function renderContent(content) {
     h1.innerText = content.title
     p.innerText = content.text
-    main.append(contentContainer)
 }
 
 // -- RENDER THEME --/ 
@@ -303,6 +301,7 @@ function validateUser() {
 function adminView(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
     let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
+    themeList.innerHTML = ""
 
     newTitle.value = currentValues.title
     newText.value = currentValues.text
@@ -338,14 +337,12 @@ function adminView(){
     })
 
     saveThemeBtn.addEventListener("click", openSaveThemeContainer)
-
     main.append(editContentContainer, editThemeContainer, themesDiv)
     contentContainer.remove()
 
     viewToggle.innerText = "User View"
     viewToggle.addEventListener("click", userView)
 }
-
 
 // -- Page for logged in users -- /
 function adminPage() {
@@ -383,13 +380,21 @@ function saveTheme(){
     renderTheme(newTheme)
 }
 
+saveContentBtn.addEventListener("click", () => {
+    let newContent = {
+        title: getValue(newTitle),
+        text: getValue(newText)
+    }
+    localStorage.setItem("activeContent", JSON.stringify(newContent))
+    checkContent()
+})
+
 // -- VIEW TO SHOW ALL THEME AND CONTENT EDITS --/
 function userView(){
     editContentContainer.remove()
     editThemeContainer.remove()
 
-    h1.innerHTML = getValue(newTitle)
-    p.innerHTML = getValue(newText)
+    checkContent()
 
     viewToggle.innerText = "Admin View"
     viewToggle.removeEventListener("click", userView)
