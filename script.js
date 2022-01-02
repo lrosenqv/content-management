@@ -8,7 +8,7 @@ footer.innerHTML = "This is a footer"
 root.append(header, main, footer)
 
 // -- LOGIN FORM --/
-let loginForm = document.createElement("form")
+let loginForm = document.createElement("div")
 loginForm.id = "loginForm"
 
 let userNameInput = document.createElement ("input")
@@ -24,6 +24,10 @@ passwordInput.required = true
 let loginBtn = document.createElement ("button")
 loginBtn.innerHTML = "Log In"
 loginBtn.id = "loginBtn"
+
+let errorMsg = document.createElement("div")
+errorMsg.id = "errorMsg"
+errorMsg.innerText = "Wrong username or password"
 
 loginForm.append(userNameInput, passwordInput, loginBtn)
 
@@ -41,7 +45,6 @@ viewToggle.id = "viewToggle"
 
 onlineBox.append(viewToggle, logoutBtn)
 
-
 // -- CONTENT --/ 
 let contentContainer = document.createElement("div")
 contentContainer.id = "contentContainer"
@@ -53,57 +56,71 @@ window.addEventListener('load', initPage)
 
 let onlineUser = []
 
+checkTheme()
+
 // -- WHEN LOADING PAGE --/
 function initPage() {
     let onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
-    //let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
-    //setTheme(activeTheme)
-    renderContent()
-
-    /*if (onlineUser == null) {
+    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
+    setTheme(activeTheme)
+    
+    if (onlineUser == null) {
         startPage()
+        checkContent()
 
     } else {
         adminPage()
-    }*/
+    }
 } 
-
-function checkForATheme(){
-    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
-    console.log(activeTheme)
-}
 
 // -- Page for not logged in users --/ 
 function startPage() {
     header.append(loginForm)
 }
 
+// -- CHECK FOR EXISTING CONTENT, IF NULL, SET PLACEHOLDER-TEXT
 function checkContent(){
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
-    
-    if(activeContent.title == "") {
-        let placeholderContent = {
-            title: "PlaceHolder Header",
-            text: activeContent.text
-        }
-        localStorage.setItem("activeContent", JSON.stringify(placeholderContent))
-    }
 
-    if(activeContent.text == "") {
+    if(activeContent == null) {
         let placeholderContent = {
-            title: activeContent.title,
-            text: "PlaceHolder Text"
+            title: "Placeholder Header",
+            text: "Placeholder Text"
         }
         localStorage.setItem("activeContent", JSON.stringify(placeholderContent))
     }
+    renderContent(activeContent)
 }
 
 // -- RENDER CONTENT ON SITE --/
-function renderContent() {
-
-    h1.innerText = activeContent.title
-    p.innerText = activeContent.text
+function renderContent(activeCo) {
+    h1.innerText = activeCo.title
+    p.innerText = activeCo.text
     main.append(contentContainer)
+}
+
+// -- CHECK FOR ACTIVE THEME, IF NULL, SET STANDARD THEME --/
+async function checkTheme(){
+    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
+
+    if(activeTheme == null) {
+        let themes = await getThemes()
+
+        let defaultTheme = themes.find(name => name.themeName == "standardTheme");
+        localStorage.setItem("activeTheme", JSON.stringify(defaultTheme))
+    }
+}
+
+getThemes()
+// -- SET THEMES OF JSON IN LS --/
+async function getThemes(){
+    let themesList = JSON.parse(localStorage.getItem("themes"))
+    if(themesList == null){
+        let themes = await fetchJSON("./json/themes.json")
+
+        localStorage.setItem("themes", JSON.stringify(themes))
+    }
+    return themesList
 }
 
 // -- GET STUFF FROM LOCAL STORAGE --/
@@ -117,6 +134,11 @@ function getUsersFromLS() {
     }
 }
 
+function clearErrorMsg(){
+    errorMsg.remove()
+}
+
+let interval = setInterval
 // -- LOG IN & USER VALIDATION --/
 loginBtn.addEventListener('click', validateUser)
 function validateUser() {
@@ -125,17 +147,18 @@ function validateUser() {
     let passInput = passwordInput.value;
     let userOk = userList.find(userList => userList.username == userInput);
     let passwordOk = userList.find(userList => userList.password == passInput);
-    let validUser = userOk && passwordOk;
+    let timeout;
 
-    if(validUser) {
+    if(!userOk || !passwordOk) {
+        loginForm.append(errorMsg)
+        timeout = setTimeout(clearErrorMsg, 2000)
+    }
+
+    if(userOk && passwordOk){
         let onlineUser = {username: userInput, status: "online" }
         localStorage.setItem("onlineUser", JSON.stringify(onlineUser))
         adminPage()
-
-    } else {
-        loginForm.insertAdjacentText("afterend", "Username or password is incorrect")
-        console.log("helt fel hallå");
-    }
+    } 
 }
 
 // -- Page for logged in users -- /
@@ -144,7 +167,6 @@ function adminPage() {
     viewToggle.innerText = "User View"
     adminView()
 }
-
 
 // -- COLOR PICKER --/
 Coloris({
@@ -194,9 +216,6 @@ saveContentBtn.id = "saveContentBtn"
 let editThemeContainer = document.createElement("div")
 editThemeContainer.id = "editThemeContainer"
 editThemeContainer.innerHTML = "<h2>Customize Theme</h2>"
-
-let themesDiv = document.createElement("div")
-themesDiv.id = "themesDiv"
   
 let newTitleColour = document.createElement("input")
 newTitleColour.className = "Coloris"
@@ -217,6 +236,13 @@ saveEditsBtn.id = "saveEditsBtn"
 let saveThemeBtn = document.createElement("button")
 saveThemeBtn.innerText = "Save as Theme"
 saveThemeBtn.id = "saveThemeBtn"
+
+let themesDiv = document.createElement("div")
+themesDiv.id = "themesDiv"
+
+let themeList = document.createElement("ul")
+themeList.id = "themeList"
+themeList.innerText = ""
 
 // -- Change font for title -- /
 let newFontTitle = document.createElement("select")
@@ -245,31 +271,30 @@ fonts.forEach((font) => {
 
 // -- APPEND RIGHT ELEMENTS TO RIGHT DIV --/
 editContentContainer.append(newTitle, newText, saveContentBtn)
-editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn)
+editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
 
 newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
-//newFontTitle.insertAdjacentHTML("afterend", "<button id='newFontBtn'>Edit</button>")
-
 newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
-//newTitle.insertAdjacentHTML("afterend", "<button id='newTitleBtn'>Edit</button>")
-
 newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
-//newFontText.insertAdjacentHTML("afterend", "<button id='newFontTextBtn'>Edit</button>")
-
 newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
-//newText.insertAdjacentHTML("afterend", "<button id='NewTextBtn'>Edit</button>")
-
 newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
-//newTitleColour.insertAdjacentHTML("afterend", "<button id='newTitleCoBtn'>Edit</button>")
-
 newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
-//newTextColour.insertAdjacentHTML("afterend", "<button id='newTextCoBtn'>Edit</button>")
-
 newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
-//newAccentColour.insertAdjacentHTML("afterend", "<button id='newAccCoBtn'>Edit</button>")
-
 newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
-//newContrastColour.insertAdjacentHTML("afterend", "<button id='newContrastCoBtn'>Edit</button>")
+
+//-- Pop Up save new Theme --/
+let saveThemeContainer = document.createElement("div")
+saveThemeContainer.id = "saveThemeContainer"
+saveThemeContainer.insertAdjacentHTML("afterbegin", "<h4>Add Theme Name</h4>")
+
+let newThemeName = document.createElement("input")
+newThemeName.id = "newThemeName"
+
+let saveThemeBtn2 = document.createElement("button")
+saveThemeBtn2.innerText = "Save Theme"
+saveThemeBtn2.id = "saveThemeBtn2"
+
+saveThemeContainer.append(newThemeName, saveThemeBtn2)
 
 // -- ADMIN VIEW --/
 function adminView(){
@@ -278,21 +303,24 @@ function adminView(){
 
     newTitle.value = currentValues.title
     newText.value = currentValues.text
+    newFontTitle.value = currentTheme.titleFont
     newTitleColour.value = currentTheme.titleColour
+    newFontText.value = currentTheme.textFont
     newTextColour.value = currentTheme.textColour
     newAccentColour.value = currentTheme.accentColour
-    newContrastColour.value = currentTheme.accentTextColour
+    newContrastColour.value = currentTheme.contrastColour
 
     themesList()
 
     saveEditsBtn.addEventListener("click", () => {
         let themeChanges = {
             themeName: "customTheme",
-            backgroundColour: "white",
+            titleFont: newFontTitle.value,
             titleColour: newTitleColour.value,
+            textFont: newFontText.value,
             textColour: newTextColour.value,
             accentColour: newAccentColour.value,
-            accentTextColour: newContrastColour.value
+            contrastColour: newContrastColour.value
         }
 
         let contentChanges = {
@@ -304,11 +332,47 @@ function adminView(){
         localStorage.setItem("activeContent", JSON.stringify(contentChanges))
     })
 
-    main.append(editContentContainer, editThemeContainer)
+    saveThemeBtn.addEventListener("click", openSaveThemeContainer)
+
+    main.append(editContentContainer, editThemeContainer, themesDiv)
     contentContainer.remove()
 
     viewToggle.innerText = "User View"
     viewToggle.addEventListener("click", userView)
+}
+
+function openSaveThemeContainer(){
+    saveThemeBtn2.addEventListener("click", saveTheme)
+    editContentContainer.append(saveThemeContainer)
+}
+
+function saveTheme(){
+    let collectedThemes = JSON.parse(localStorage.getItem("themes"))
+    /*window.addEventListener("click", (evt) => {
+        if(evt.target.id != "saveThemeBtn2"){
+            saveThemeContainer.remove()
+        }
+    })*/
+
+    let lastItem = collectedThemes[collectedThemes.length - 1]
+    let newID = lastItem.themeID + 1
+
+    let newTheme = {
+        themeID: newID,
+        themeName: getValue(newThemeName),
+        titleColour: getValue(newTitleColour),
+        textColour: getValue(newTextColour),
+        accentColour: getValue(newAccentColour),
+        contrastColour: getValue(newContrastColour),
+        titleFont:getValue(newFontTitle),
+        textFont: getValue(newFontTitle)
+    }
+    
+    collectedThemes.push(newTheme)
+    localStorage.setItem("themes", JSON.stringify(collectedThemes))
+    themeList.innerHTML = ""
+    themesList()
+    setTheme(newTheme)
 }
 
 // -- VIEW TO SHOW ALL THEME AND CONTENT EDITS --/
@@ -317,14 +381,7 @@ function userView(){
     editThemeContainer.remove()
 
     h1.innerHTML = getValue(newTitle)
-    h1.style.color = getValue(newTitleColour)
     p.innerHTML = getValue(newText)
-    p.style.color = getValue(newTextColour)
-
-    header.style.backgroundColor = getValue(newAccentColour)
-    footer.style.backgroundColor = getValue(newAccentColour)
-    header.style.color = getValue(newContrastColour)
-    footer.style.color = getValue(newContrastColour)
 
     viewToggle.innerText = "Admin View"
     viewToggle.removeEventListener("click", userView)
@@ -333,19 +390,34 @@ function userView(){
     main.append(contentContainer)
 }
 
+// -- GET VALUES FROM INPUT FIELDS --/
+function getValue(input){
+    return input.value
+}
+
 // -- LIST OF PRESET & SAVED THEMES --/
 function themesList(){
     let existingThemes = JSON.parse(localStorage.getItem("themes"))
-    let themeList = document.createElement("ul")
     
-    existingThemes.forEach((theme) => {
-        let themeListTemplate = `
-        <li id="${theme.themeID}">
-        ${theme.themeName}
-        <div id="colorSwatch" style="background-color:${theme.accentColour}"></div>
-        </li>
-        `
-        themeList.insertAdjacentHTML("beforeend", themeListTemplate)
+    existingThemes.forEach((theme, index) => {
+        let themeItem = document.createElement("li")
+        themeItem.id = theme.themeID
+        themeItem.innerText = theme.themeName
+
+        let deleteThemeBtn = document.createElement("button")
+        deleteThemeBtn.innerText = "X"
+
+        let swatch = document.createElement("div")
+        swatch.id = "colorSwatch"
+        swatch.style.backgroundColor = theme.accentColour
+
+        themeItem.append(swatch, deleteThemeBtn)
+        themeList.append(themeItem)
+
+        deleteThemeBtn.addEventListener("click", () => {
+            existingThemes.splice(index, 1)
+            localStorage.setItem("themes", JSON.stringify(existingThemes))
+        })
     })
 
     themeList.addEventListener("click", (evt) => {
@@ -359,10 +431,11 @@ function themesList(){
         })
         console.log(evt.target.id);
     })
+
     themesDiv.innerHTML = "<h2>Choose an existing theme</h2>"
     themesDiv.append(themeList)
-    editThemeContainer.append(themesDiv)
 }
+
 
 // -- LOG OUT  --/ 
 logoutBtn.addEventListener("click", () => {
@@ -386,8 +459,8 @@ function setTheme(theme){
     p.style.fontFamily = theme.textFont;
     header.style.backgroundColor = theme.accentColour;
     footer.style.backgroundColor = theme.accentColour;
-    header.style.color = theme.accentTextColour;
-    footer.style.color = theme.accentTextColour;
+    header.style.color = theme.contrastColour;
+    footer.style.color = theme.contrastColour;
 }
 
 // -- FETCH JSON --//
@@ -402,42 +475,3 @@ async function fetchJSON(url){
         console.error(err)
     }
 }
-getThemes()
-// -- SET THEMES OF JSON IN LS --/
-async function getThemes(){
-    let themes = await fetchJSON("./json/themes.json")
-    localStorage.setItem("themes", JSON.stringify(themes))
-}
-
-// -- TESTING -- /
-let testBtn = document.createElement("button")
-testBtn.innerText = "testknapp"
-
-let testInput = document.createElement("input")
-testInput.type = "text"
-
-footer.append(testBtn, testInput)
-
-/*async function test() {
-    let themesT = await fetchJSON("./json/themes.json")
-    console.log(themesT)
-
-    testBtn.addEventListener("click", () => {
-        let hej = getValue(testInput)
-        console.log(hej);
-
-        let themeChangesT = {
-            "hej": testInput.value
-        }
-        console.log("klick", themeChangesT)
-        themesT.push(themeChangesT)
-        console.log(themesT)
-    })
-} 
-
-test()
-
-function getValue(input){
-    return input.value
-}
-*/

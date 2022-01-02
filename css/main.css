@@ -6,6 +6,8 @@ header { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-
 
 header #loginForm { -ms-flex-item-align: center; align-self: center; display: -webkit-box; display: -ms-flexbox; display: flex; margin-right: 3rem; -ms-flex-pack: distribute; justify-content: space-around; }
 
+header #loginForm #errorMsg { -webkit-box-ordinal-group: 0; -ms-flex-order: -1; order: -1; -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; margin-right: 1rem; }
+
 header #loginForm input { margin-right: 0.6rem; }
 
 header #loginForm #loginBtn { background-color: #7e5894; color: white; }
@@ -54,17 +56,19 @@ main #editThemeContainer #saveEditsBtn { width: 8rem; margin-left: 4rem; }
 
 main #editThemeContainer #saveThemeBtn { width: 8rem; margin-right: 4rem; }
 
-main #themesDiv { padding-top: 2rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; z-index: 1; margin: 2rem 20rem; }
+main #themesDiv { padding-top: 2rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; width: 100%; }
 
 main #themesDiv h2 { margin-top: 0; }
 
-main #themesDiv ul { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; padding: 0; width: 60%; }
+main #themesDiv ul { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-column-gap: 0.7rem; column-gap: 0.7rem; row-gap: 0.7rem; padding: 0; width: 60%; }
 
-main #themesDiv ul li { display: -webkit-box; display: -ms-flexbox; display: flex; padding: 0.6rem; cursor: pointer; }
+main #themesDiv ul li { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: baseline; -ms-flex-align: baseline; align-items: baseline; -webkit-column-gap: 0.3rem; column-gap: 0.3rem; padding: 0.3rem 0.5rem; cursor: pointer; border: 1px solid #727272; border-radius: 25px 25px; }
 
-main #themesDiv ul li:focus { border: 1px solid black; }
+main #themesDiv ul li #colorSwatch { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; width: 1rem; height: 1rem; }
 
-main #themesDiv ul li #colorSwatch { width: 1rem; height: 1rem; }
+main #themesDiv ul li button { padding: 0.2rem; width: 1.7rem; font-size: 0.8rem; color: white; background-color: rgba(226, 95, 95, 0.63); }
+
+main #themesDiv ul li button:hover { background-color: #e25f5f; }
 
 main #contentContainer { height: 100%; width: 100vw; background-color: white; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; position: absolute; top: 0; z-index: 999; }
 

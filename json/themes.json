@@ -1,7 +1,7 @@
 [
-    {"themeID": 0, "themeName": "standardTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "thistle","accenttextColour": "white", "titleFont":"Arial", "textFont": "Arial"},
-    {"themeID": 1, "themeName": "darkTheme","backgroundColour": "black","titleColour": "black","textColour": "black","accentColour": "black","accenttextColour": "white", "titlefont":"helvetica", "textFont": "helvetica"},
-    {"themeID": 2, "themeName": "lightTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "lightsteelblue","accenttextColour": "black", "titleFont":"times new roman", "textFont": "times new roman"},
-    {"themeID": 3, "themeName": "vibrantTheme","backgroundColour": "cornflowerblue","titleColour": "black","textColour": "black","accentColour": "pink","accentTextColour": "black", "titleFont":"arial", "textFont": "arial"},
-    {"themeID": 4, "themeName": "purpleTheme","backgroundColour": "purple","titleColour": "black","textColour": "black","accentColour": "rgb(167, 145, 216)","accenttextColour": "white", "titleFont":"times new roman", "textFont": "times new roman"}
+    {"themeID": 0, "themeName": "standardTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "thistle","contrastColour": "white", "titleFont":"Arial", "textFont": "Arial"},
+    {"themeID": 1, "themeName": "darkTheme","backgroundColour": "black","titleColour": "black","textColour": "black","accentColour": "black","contrastColour": "white", "titleFont": "Helvetica", "textFont": "Helvetica"},
+    {"themeID": 2, "themeName": "lightTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "lightsteelblue","contrastColour": "black", "titleFont":"Times New Roman", "textFont": "Times New Roman"},
+    {"themeID": 3, "themeName": "vibrantTheme","backgroundColour": "cornflowerblue","titleColour": "black","textColour": "black","accentColour": "pink","contrastColour": "black", "titleFont":"Arial", "textFont": "Arial"},
+    {"themeID": 4, "themeName": "purpleTheme","backgroundColour": "purple","titleColour": "black","textColour": "black","accentColour": "rgb(167, 145, 216)","contrastColour": "white", "titleFont":"Times New Roman", "textFont": "Times New Roman"}
 ]
