@@ -1,21 +1,35 @@
-import { root, header, main, footer } from "./modules/elements.mjs";
-root.append(header, main, footer)
+window.addEventListener('load', initPage)
 
+// ---  IMPORTING ELEMENTS -- /
+
+// -- DOCUMENT BASE -- /
+let root = document.getElementById("root")
+let header = document.getElementById("siteHeader")
+let main = document.getElementById("siteMain")
+let footer = document.getElementById("siteFooter")
+footer.innerHTML = "This is a footer"
+
+    // -- Login Form -- /
 import { loginForm, userNameInput, passwordInput, loginBtn, errorMsg } from "./modules/elements.mjs";
-loginForm.append(userNameInput, passwordInput, loginBtn, errorMsg )
+loginForm.append(userNameInput, passwordInput, loginBtn)
 
+    // -- Div that replaces login form when logged in -- /
 import { onlineBox, logoutBtn, viewToggle } from "./modules/elements.mjs";
 onlineBox.append(viewToggle, logoutBtn)
 
+    // -- Contains the content on the site -- /
 import { contentContainer, h1, p } from "./modules/elements.mjs";
 contentContainer.append(h1, p)
 
+    // -- Container with tools to edit contens -- /
 import { editContentContainer, newTitle, newText, saveContentBtn } from "./modules/elements.mjs";
 editContentContainer.append(newTitle, newText, saveContentBtn)
 
+    // -- Container with tools to edit theme -- /
 import { editThemeContainer, newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv, themeList } from "./modules/elements.mjs";
-editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
+editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn)
 
+        // -- Adding headers to theme editing-tools -- /
 newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
 newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
 newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
@@ -25,6 +39,7 @@ newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
 newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
 newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
 
+    // -- Pop-up container to save theme in local Storage --/
 import { saveThemeContainer, newThemeName, saveThemeBtn2 } from "./modules/elements.mjs";
 saveThemeContainer.append(newThemeName, saveThemeBtn2)
 
@@ -50,8 +65,6 @@ fonts.forEach((font) => {
 })
 
 // ------------------------------------------------ CODE STARTS HERE ------------------------------------------------ /
-
-window.addEventListener('load', initPage)
 
 // -- WHEN LOADING PAGE --/
 function initPage() {
@@ -128,7 +141,10 @@ function getUsersFromLS() {
         return userList
     }
 }
-
+// -- CLEAR ERROR MESSAGE WHEN LOGIN DETAILS IS INCORRECT --/
+function clearErrorMsg(){
+    errorMsg.remove()
+}
 
 // -- LOG IN & USER VALIDATION --/
 loginBtn.addEventListener('click', validateUser)
@@ -152,51 +168,14 @@ function validateUser() {
     } 
 }
 
-// -- CLEAR ERROR MESSAGE WHEN LOGIN DETAILS IS INCORRECT --/
-function clearErrorMsg(){
-    errorMsg.remove()
-}
-
-// -- Page for logged in users -- /
-function adminPage() {
-    header.append(onlineBox)
-    viewToggle.innerText = "User View"
-    adminView()
-}
-
-// -- COLOR PICKER --/
-Coloris({
-    swatches: [
-      '#264653',
-      '#2a9d8f',
-      '#e9c46a',
-      '#f4a261',
-      '#e76f51',
-      '#d62828',
-      '#023e8a',
-      '#0077b6',
-      '#0096c7',
-      '#00b4d8',
-      '#48cae4',
-    ]
-});
-
-Coloris({
-    format: 'hex',
-});
-
-Coloris({
-    el: '.Coloris'
-});
-
-
 // -- ADMIN VIEW --/
-function adminView(){
+export function adminView(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
     let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
 
     newTitle.value = currentValues.title
     newText.value = currentValues.text
+
     newFontTitle.value = currentTheme.titleFont
     newTitleColour.value = currentTheme.titleColour
     newFontText.value = currentTheme.textFont
@@ -223,6 +202,7 @@ function adminView(){
         }
         localStorage.setItem("activeTheme", JSON.stringify(themeChanges))
         setTheme(themeChanges)
+
         localStorage.setItem("activeContent", JSON.stringify(contentChanges))
     })
 
@@ -233,6 +213,14 @@ function adminView(){
 
     viewToggle.innerText = "User View"
     viewToggle.addEventListener("click", userView)
+}
+
+
+// -- Page for logged in users -- /
+function adminPage() {
+    header.append(onlineBox)
+    viewToggle.innerText = "User View"
+    adminView()
 }
 
 function openSaveThemeContainer(){
@@ -325,7 +313,6 @@ function themesList(){
     themesDiv.append(themeList)
 }
 
-
 // -- LOG OUT  --/ 
 logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("onlineUser")
@@ -333,8 +320,6 @@ logoutBtn.addEventListener("click", () => {
 })
 
 // Arrays och logg till localStorage
-let userList = []
-
 let mocklist = [
     {username : "admin", password : "admin"},
 ]

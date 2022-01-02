@@ -1,15 +1,3 @@
-// -- DOCUMENT BASE -- /
-
-let root = document.getElementById("root")
-let header = document.createElement("header")
-let main = document.createElement("main")
-let footer = document.createElement("footer")
-footer.innerHTML = "This is a footer"
-
-//root.append(header, main, footer)
-
-export { root, header, main, footer }
-
 // -- LOGIN FORM --/
 let loginForm = document.createElement("form")
 loginForm.id = "loginForm"
@@ -38,7 +26,7 @@ export { loginForm, userNameInput, passwordInput, loginBtn, errorMsg }
 // -- BOX THAT REPLACES LOGIN FORM WHEN LOGGED IN --/
 let onlineBox = document.createElement("div")
 onlineBox.id = "onlineBox"
-onlineBox.insertAdjacentHTML("afterbegin", "<p>You are now logged in as admin</p>")
+onlineBox.insertAdjacentHTML("afterbegin", "<p>Logged in as admin</p>")
 
 let logoutBtn = document.createElement("button")
 logoutBtn.innerHTML = "Log out"
@@ -138,15 +126,32 @@ fonts.forEach((font) => {
     newFontText.append(aFont)
 })*/
 
-// -- APPEND RIGHT ELEMENTS TO RIGHT DIV --/
-/*newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
-newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
-newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
-newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
-newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
-newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
-newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
-newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")*/
+
+// -- COLOR PICKER --/
+Coloris({
+    swatches: [
+      '#264653',
+      '#2a9d8f',
+      '#e9c46a',
+      '#f4a261',
+      '#e76f51',
+      '#d62828',
+      '#023e8a',
+      '#0077b6',
+      '#0096c7',
+      '#00b4d8',
+      '#48cae4',
+    ]
+});
+
+Coloris({
+    format: 'hex',
+});
+
+Coloris({
+    el: '.Coloris'
+});
+
 
 //editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
 export { editThemeContainer, newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv, themeList}

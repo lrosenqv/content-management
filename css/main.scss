@@ -28,12 +28,6 @@ header {
         margin-right:3rem;
         justify-content: space-around;
 
-        #errorMsg{
-            order:-1;
-            align-self: center;
-            margin-right:1rem;
-        }
-
         input{
             margin-right:0.6rem;
         }
@@ -46,6 +40,12 @@ header {
                 background-color:rgb(87, 61, 102);
             }
         }
+    }
+
+    #errorMsg{
+        order:-1;
+        align-self: center;
+        margin-right:1rem;
     }
 
     #onlineBox {
