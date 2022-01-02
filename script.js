@@ -1,7 +1,5 @@
 window.addEventListener('load', initPage)
 
-// ---  IMPORTING ELEMENTS -- /
-
 // -- DOCUMENT BASE -- /
 let root = document.getElementById("root")
 let header = document.getElementById("siteHeader")
@@ -9,39 +7,108 @@ let main = document.getElementById("siteMain")
 let footer = document.getElementById("siteFooter")
 footer.innerHTML = "This is a footer"
 
-    // -- Login Form -- /
-import { loginForm, userNameInput, passwordInput, loginBtn, errorMsg } from "./modules/elements.mjs";
+// -- LOGIN FORM --/
+let loginForm = document.createElement("form")
+loginForm.id = "loginForm"
+
+let userNameInput = document.createElement ("input")
+userNameInput.placeholder = "Username"
+userNameInput.type = "text"
+userNameInput.required = true
+
+let passwordInput = document.createElement ("input")
+passwordInput.placeholder = "Password"
+passwordInput.type = "password"
+passwordInput.required = true
+
+let loginBtn = document.createElement ("button")
+loginBtn.innerHTML = "Log In"
+loginBtn.id = "loginBtn"
+
+let errorMsg = document.createElement("div")
+errorMsg.id = "errorMsg"
+errorMsg.innerText = "Wrong username or password"
+
 loginForm.append(userNameInput, passwordInput, loginBtn)
 
-    // -- Div that replaces login form when logged in -- /
-import { onlineBox, logoutBtn, viewToggle } from "./modules/elements.mjs";
+// -- BOX THAT REPLACES LOGIN FORM WHEN LOGGED IN --/
+let onlineBox = document.createElement("div")
+onlineBox.id = "onlineBox"
+onlineBox.insertAdjacentHTML("afterbegin", "<p>Logged in as admin</p>")
+
+let logoutBtn = document.createElement("button")
+logoutBtn.innerHTML = "Log out"
+logoutBtn.id = "logoutBtn"
+
+let viewToggle = document.createElement("button")
+viewToggle.id = "viewToggle"
+
 onlineBox.append(viewToggle, logoutBtn)
 
-    // -- Contains the content on the site -- /
-import { contentContainer, h1, p } from "./modules/elements.mjs";
+// -- CONTENT --/ 
+let contentContainer = document.createElement("div")
+contentContainer.id = "contentContainer"
+let h1 = document.createElement("h1")
+let p = document.createElement("p")
+
 contentContainer.append(h1, p)
 
-    // -- Container with tools to edit contens -- /
-import { editContentContainer, newTitle, newText, saveContentBtn } from "./modules/elements.mjs";
+// -- CREATING EDIT CONTENT FORM ELEMENTS -- / 
+let editContentContainer = document.createElement("div")
+editContentContainer.id = "editContentContainer"
+editContentContainer.innerHTML = "<h2>Change Content</h2>"
+
+let newTitle = document.createElement("input")
+newTitle.id = "newTitle"
+newTitle.type = "text"
+
+let newText = document.createElement("textarea")
+newText.cols = 50
+newText.rows = 10
+newText.id = "newText"
+
+let saveContentBtn = document.createElement("button")
+saveContentBtn.innerText = "Save Content"
+saveContentBtn.id = "saveContentBtn"
+
 editContentContainer.append(newTitle, newText, saveContentBtn)
 
-    // -- Container with tools to edit theme -- /
-import { editThemeContainer, newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv, themeList } from "./modules/elements.mjs";
-editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn)
+// -- CREATING EDIT THEME ETC. FORM ELEMENTS -- /
+let editThemeContainer = document.createElement("div")
+editThemeContainer.id = "editThemeContainer"
+editThemeContainer.innerHTML = "<h2>Customize Theme</h2>"
+  
+let newTitleColour = document.createElement("input")
+newTitleColour.className = "Coloris"
 
-        // -- Adding headers to theme editing-tools -- /
-newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
-newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
-newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
-newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
-newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
-newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
-newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
-newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
+let newTextColour = document.createElement("input")
+newTextColour.className = "Coloris"
 
-    // -- Pop-up container to save theme in local Storage --/
-import { saveThemeContainer, newThemeName, saveThemeBtn2 } from "./modules/elements.mjs";
-saveThemeContainer.append(newThemeName, saveThemeBtn2)
+let newAccentColour = document.createElement("input")
+newAccentColour.className = "Coloris"
+
+let newContrastColour = document.createElement("input")
+newContrastColour.className = "Coloris"
+
+let saveEditsBtn = document.createElement("button")
+saveEditsBtn.innerText = "Save Edits"
+saveEditsBtn.id = "saveEditsBtn"
+
+let saveThemeBtn = document.createElement("button")
+saveThemeBtn.innerText = "Save as Theme"
+saveThemeBtn.id = "saveThemeBtn"
+
+// -- DIV WITH SAVED THEMES TO CHOOSE FROM --/
+let themesDiv = document.createElement("div")
+themesDiv.id = "themesDiv"
+
+let themeList = document.createElement("ul")
+themeList.id = "themeList"
+themeList.innerText = ""
+
+// -- Select-input fields for changing fonts -- /
+let newFontTitle = document.createElement("select")
+let newFontText = document.createElement("select")
 
 // -- ARRAY WITH FONTS TO CHOOSE FROM --/
 let fonts = [
@@ -64,6 +131,57 @@ fonts.forEach((font) => {
     newFontText.append(aFont)
 })
 
+// -- COLOR PICKER --/
+Coloris({
+    swatches: [
+      '#264653',
+      '#2a9d8f',
+      '#e9c46a',
+      '#f4a261',
+      '#e76f51',
+      '#d62828',
+      '#023e8a',
+      '#0077b6',
+      '#0096c7',
+      '#00b4d8',
+      '#48cae4',
+    ]
+});
+
+Coloris({
+    format: 'hex',
+});
+
+Coloris({
+    el: '.Coloris'
+});
+
+editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
+
+    // -- Adding headers to theme editing-tools -- /
+newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
+newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
+newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
+newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
+newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
+newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
+newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
+newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
+
+//-- Pop Up save new Theme --/
+let saveThemeContainer = document.createElement("div")
+saveThemeContainer.id = "saveThemeContainer"
+saveThemeContainer.insertAdjacentHTML("afterbegin", "<h4>Add Theme Name</h4>")
+
+let newThemeName = document.createElement("input")
+newThemeName.id = "newThemeName"
+
+let saveThemeBtn2 = document.createElement("button")
+saveThemeBtn2.innerText = "Save Theme"
+saveThemeBtn2.id = "saveThemeBtn2"
+
+saveThemeContainer.append(newThemeName, saveThemeBtn2)
+
 // ------------------------------------------------ CODE STARTS HERE ------------------------------------------------ /
 
 // -- WHEN LOADING PAGE --/
@@ -71,7 +189,7 @@ function initPage() {
     checkTheme()
     let onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
     let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
-    setTheme(activeTheme)
+    renderTheme(activeTheme)
     
     if (onlineUser == null) {
         startPage()
@@ -88,6 +206,7 @@ function startPage() {
 }
 
 // -- CHECK FOR EXISTING CONTENT, IF NULL, SET PLACEHOLDER-TEXT
+
 function checkContent(){
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
 
@@ -101,13 +220,6 @@ function checkContent(){
     renderContent(activeContent)
 }
 
-// -- RENDER CONTENT ON SITE --/
-function renderContent(activeCo) {
-    h1.innerText = activeCo.title
-    p.innerText = activeCo.text
-    main.append(contentContainer)
-}
-
 // -- CHECK FOR ACTIVE THEME, IF NULL, SET STANDARD THEME --/
 async function checkTheme(){
     let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
@@ -118,6 +230,25 @@ async function checkTheme(){
         let defaultTheme = themes.find(name => name.themeName == "standardTheme");
         localStorage.setItem("activeTheme", JSON.stringify(defaultTheme))
     }
+}
+
+// -- RENDER CONTENT ON SITE --/
+function renderContent(content) {
+    h1.innerText = content.title
+    p.innerText = content.text
+    main.append(contentContainer)
+}
+
+// -- RENDER THEME --/ 
+function renderTheme(theme){
+    h1.style.color = theme.titleColour;
+    h1.style.fontFamily = theme.titleFont;
+    p.style.color = theme.textColour;
+    p.style.fontFamily = theme.textFont;
+    header.style.backgroundColor = theme.accentColour;
+    footer.style.backgroundColor = theme.accentColour;
+    header.style.color = theme.contrastColour;
+    footer.style.color = theme.contrastColour;
 }
 
 // -- SET THEMES OF JSON IN LS --/
@@ -169,7 +300,7 @@ function validateUser() {
 }
 
 // -- ADMIN VIEW --/
-export function adminView(){
+function adminView(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
     let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
 
@@ -201,7 +332,7 @@ export function adminView(){
             text: newText.value
         }
         localStorage.setItem("activeTheme", JSON.stringify(themeChanges))
-        setTheme(themeChanges)
+        renderTheme(themeChanges)
 
         localStorage.setItem("activeContent", JSON.stringify(contentChanges))
     })
@@ -249,7 +380,7 @@ function saveTheme(){
     localStorage.setItem("themes", JSON.stringify(collectedThemes))
     themeList.innerHTML = ""
     themesList()
-    setTheme(newTheme)
+    renderTheme(newTheme)
 }
 
 // -- VIEW TO SHOW ALL THEME AND CONTENT EDITS --/
@@ -301,7 +432,7 @@ function themesList(){
         existingThemes.find((theme) => {
 
             if(evt.target.id == theme.themeID){
-                setTheme(theme)
+                renderTheme(theme)
                 location.reload()
                 localStorage.setItem("activeTheme", JSON.stringify(theme))
             }
@@ -325,17 +456,7 @@ let mocklist = [
 ]
 localStorage.setItem("userList", JSON.stringify(mocklist))
 
-// -- SET THEME --/ 
-function setTheme(theme){
-    h1.style.color = theme.titleColour;
-    h1.style.fontFamily = theme.titleFont;
-    p.style.color = theme.textColour;
-    p.style.fontFamily = theme.textFont;
-    header.style.backgroundColor = theme.accentColour;
-    footer.style.backgroundColor = theme.accentColour;
-    header.style.color = theme.contrastColour;
-    footer.style.color = theme.contrastColour;
-}
+
 
 // -- FETCH JSON --//
 async function fetchJSON(url){

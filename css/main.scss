@@ -89,6 +89,8 @@ main {
         column-gap: 1rem;
         justify-content: center;
         width:100vw;
+        padding: 0 23rem;
+        box-sizing: border-box;
 
         h2 {
             align-self: center;
@@ -96,7 +98,6 @@ main {
         }
 
         h3 {
-            width:28vw;
             text-align: end;
             font-size: 1rem;
             align-self: flex-start;
@@ -108,12 +109,8 @@ main {
 
         input {
             width:26.3rem;
-            margin-right:30%;
         }
 
-        textarea{
-            margin-right:30%;
-        }
 
         #saveContentBtn {
             width:8rem;
