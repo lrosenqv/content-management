@@ -194,11 +194,9 @@ saveThemeContainer.append(newThemeName, saveThemeBtn2, cancelBtn)
 // ------------------------------------------------ CODE STARTS HERE ------------------------------------------------ /
 
 // -- WHEN LOADING PAGE --/
-function initPage() {
-    //checkContent()
-    checkTheme()
-    //checkUser()
-
+async function initPage() {
+    checkTheme();
+    checkUser();
     
     /*if (onlineUser == null) {
         startPage()
@@ -215,7 +213,7 @@ function checkUser(){
     let online = JSON.parse(localStorage.getItem("onlineUser"))
 
     if(online){
-        adminPage()
+        adminView()
     } else {
         startPage()
     }
@@ -223,6 +221,7 @@ function checkUser(){
 
 // -- Page for not logged in users --/ 
 function startPage() {
+    checkContent()
     header.append(loginForm)
     main.append(contentContainer)
 }
@@ -257,10 +256,11 @@ async function fetchJSON(url){
         console.error(err)
     }
 }
-
+getThemes()
 // -- SET THEMES OF JSON IN LS --/
 async function getThemes(){
     let themesList = JSON.parse(localStorage.getItem("themes"))
+    
     if(themesList == null){
         let themes = await fetchJSON("./json/themes.json")
 
@@ -270,16 +270,19 @@ async function getThemes(){
 }
 
 // -- CHECK FOR ACTIVE THEME, IF NULL, SET STANDARD THEME --/
-function checkTheme(){
+async function checkTheme(){
     let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
 
     if(activeTheme == null) {
-        let themes = getThemes()
-
+        let themes = await getThemes()
+        console.log("test",themes)
         let defaultTheme = themes.find(name => name.themeName == "standardTheme");
+        renderTheme(defaultTheme)
         localStorage.setItem("activeTheme", JSON.stringify(defaultTheme))
+    } else {
+        renderTheme(activeTheme)
     }
-    renderTheme(activeTheme)
+    
 }
 
 // -- RENDER THEME --/ 
@@ -306,10 +309,6 @@ function getUsersFromLS() {
         return userList
     }
 }
-// -- CLEAR ERROR MESSAGE WHEN LOGIN DETAILS IS INCORRECT --/
-function clearErrorMsg(){
-    errorMsg.remove()
-}
 
 // -- LOG IN & USER VALIDATION --/
 loginBtn.addEventListener('click', validateUser)
@@ -333,6 +332,18 @@ function validateUser() {
     } 
 }
 
+// -- CLEAR ERROR MESSAGE WHEN LOGIN DETAILS IS INCORRECT --/
+function clearErrorMsg(){
+    errorMsg.remove()
+}
+
+/*/ -- Page for logged in users -- /
+function adminPage() {
+    header.append(onlineBox)
+    viewToggle.innerText = "User View"
+    adminView()
+}*/
+
 // -- ADMIN VIEW --/
 function adminView(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
@@ -352,29 +363,8 @@ function adminView(){
 
     themesList()
 
-    saveEditsBtn.addEventListener("click", () => {
-        let themeChanges = {
-            themeName: "customTheme",
-            titleFont: newFontTitle.value,
-            titleColour: newTitleColour.value,
-            textFont: newFontText.value,
-            backgroundColour: newBgColour.value,
-            textColour: newTextColour.value,
-            accentColour: newAccentColour.value,
-            contrastColour: newContrastColour.value
-        }
-
-        let contentChanges = {
-            title: newTitle.value,
-            text: newText.value
-        }
-        localStorage.setItem("activeTheme", JSON.stringify(themeChanges))
-        renderTheme(themeChanges)
-
-        localStorage.setItem("activeContent", JSON.stringify(contentChanges))
-    })
-
     saveThemeBtn.addEventListener("click", openSaveThemeContainer)
+    header.append(onlineBox)
     main.append(editContentContainer, editThemeContainer, themesDiv)
     contentContainer.remove()
 
@@ -382,13 +372,22 @@ function adminView(){
     viewToggle.addEventListener("click", userView)
 }
 
-// -- Page for logged in users -- /
-function adminPage() {
-    header.append(onlineBox)
-    viewToggle.innerText = "User View"
-    adminView()
+// -- VIEW TO SHOW ALL THEME AND CONTENT EDITS --/
+function userView(){
+    editContentContainer.remove()
+    editThemeContainer.remove()
+    themesDiv.remove()
+
+    checkContent()
+
+    viewToggle.innerText = "Admin View"
+    viewToggle.removeEventListener("click", userView)
+    viewToggle.addEventListener("click", adminView)
+
+    main.append(contentContainer)
 }
 
+// -- Open container for adding theme name --/
 function openSaveThemeContainer(){
     cancelBtn.addEventListener("click", () => {
         saveThemeContainer.remove()
@@ -400,7 +399,6 @@ function openSaveThemeContainer(){
 
 function saveTheme(){
     let collectedThemes = JSON.parse(localStorage.getItem("themes"))
-
     let lastItem = collectedThemes[collectedThemes.length - 1]
     let newID = lastItem.themeID + 1
 
@@ -432,20 +430,6 @@ saveContentBtn.addEventListener("click", () => {
     checkContent()
 })
 
-// -- VIEW TO SHOW ALL THEME AND CONTENT EDITS --/
-function userView(){
-    editContentContainer.remove()
-    editThemeContainer.remove()
-    themesDiv.remove()
-
-    checkContent()
-
-    viewToggle.innerText = "Admin View"
-    viewToggle.removeEventListener("click", userView)
-    viewToggle.addEventListener("click", adminView)
-
-    main.append(contentContainer)
-}
 
 // -- GET VALUES FROM INPUT FIELDS --/
 function getValue(input){
