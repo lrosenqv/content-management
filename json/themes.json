@@ -1,6 +1,6 @@
 [
     {"themeID": 0, "themeName": "standardTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "thistle","contrastColour": "white", "titleFont":"Arial", "textFont": "Arial"},
-    {"themeID": 1, "themeName": "darkTheme","backgroundColour": "#1b1d21","titleColour": "black","textColour": "black","accentColour": "#0d0e0f","contrastColour": "white", "titleFont": "Helvetica", "textFont": "Helvetica"},
+    {"themeID": 1, "themeName": "darkTheme","backgroundColour": "#1b1d21","titleColour": "#c9c9c9","textColour": "#c9c9c9","accentColour": "#0d0e0f","contrastColour": "#c9c9c9", "titleFont": "Helvetica", "textFont": "Helvetica"},
     {"themeID": 2, "themeName": "lightTheme","backgroundColour": "white","titleColour": "black","textColour": "black","accentColour": "lightsteelblue","contrastColour": "black", "titleFont":"Times New Roman", "textFont": "Times New Roman"},
     {"themeID": 3, "themeName": "vibrantTheme","backgroundColour": "#fffdba","titleColour": "black","textColour": "black","accentColour": "#a5de86","contrastColour": "black", "titleFont":"Arial", "textFont": "Arial"},
     {"themeID": 4, "themeName": "purpleTheme","backgroundColour": "#bfabdb","titleColour": "black","textColour": "black","accentColour": "#856da8","contrastColour": "white", "titleFont":"Times New Roman", "textFont": "Times New Roman"}

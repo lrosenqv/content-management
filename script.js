@@ -63,8 +63,6 @@ newTitle.id = "newTitle"
 newTitle.type = "text"
 
 let newText = document.createElement("textarea")
-newText.cols = 50
-newText.rows = 10
 newText.id = "newText"
 
 let saveContentBtn = document.createElement("button")
@@ -314,9 +312,7 @@ function validateUser() {
     if(!userOk || !passwordOk) {
         header.append(errorMsg)
         timeout = setTimeout(clearErrorMsg, 2000)
-    }
-
-    if(userOk && passwordOk){
+    } else if(userOk && passwordOk){
         let onlineUser = {username: userInput, status: "online" }
         localStorage.setItem("onlineUser", JSON.stringify(onlineUser))
         adminPage()
@@ -346,6 +342,22 @@ function adminView(){
     newContrastColour.value = currentTheme.contrastColour
 
     themesList()
+
+    saveEditsBtn.addEventListener("click", () => {
+        let themeChanges = {
+            themeName: "customTheme",
+            titleFont: newFontTitle.value,
+            titleColour: newTitleColour.value,
+            textFont: newFontText.value,
+            textColour: newTextColour.value,
+            backgroundColour: newBgColour.value,
+            accentColour: newAccentColour.value,
+            contrastColour: newContrastColour.value
+        }
+
+        localStorage.setItem("activeTheme", JSON.stringify(themeChanges))
+        renderTheme(themeChanges)
+    });
 
     saveThemeBtn.addEventListener("click", openSaveThemeContainer)
     header.append(onlineBox)
@@ -462,7 +474,11 @@ function themesList(){
 // -- LOG OUT  --/ 
 logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("onlineUser")
-    location.reload()
+    onlineBox.remove()
+    editThemeContainer.remove()
+    editContentContainer.remove()
+    themesDiv.remove()
+    startPage()
 })
 
 // Arrays och logg till localStorage
