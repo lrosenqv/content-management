@@ -324,15 +324,12 @@ function clearErrorMsg(){
     errorMsg.remove()
 }
 
-// -- ADMIN VIEW --/
-function adminView(){
+function showCurrentValue(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
     let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
-    themeList.innerHTML = ""
-
+    
     newTitle.value = currentValues.title
     newText.value = currentValues.text
-
     newFontTitle.value = currentTheme.titleFont
     newTitleColour.value = currentTheme.titleColour
     newFontText.value = currentTheme.textFont
@@ -340,6 +337,12 @@ function adminView(){
     newBgColour.value = currentTheme.backgroundColour
     newAccentColour.value = currentTheme.accentColour
     newContrastColour.value = currentTheme.contrastColour
+}
+
+// -- ADMIN VIEW --/
+function adminView(){
+    themeList.innerHTML = ""
+    showCurrentValue()
 
     themesList()
 
@@ -393,6 +396,7 @@ function openSaveThemeContainer(){
     editThemeContainer.append(saveThemeContainer)
 }
 
+// -- Save new theme -- /
 function saveTheme(){
     let collectedThemes = JSON.parse(localStorage.getItem("themes"))
     let lastItem = collectedThemes[collectedThemes.length - 1]
@@ -412,6 +416,7 @@ function saveTheme(){
     
     collectedThemes.push(newTheme)
     localStorage.setItem("themes", JSON.stringify(collectedThemes))
+    localStorage.setItem("activeTheme", JSON.stringify(newTheme))
     saveThemeContainer.remove()
     themeList.innerHTML = ""
     themesList()
