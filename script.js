@@ -161,7 +161,6 @@ Coloris({
 editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newBgColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
 
     // -- Adding headers to theme editing-tools -- /
-
 newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
 newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
 
@@ -192,28 +191,16 @@ cancelBtn.id = "cancelBtn"
 saveThemeContainer.append(newThemeName, saveThemeBtn2, cancelBtn)
 
 // ------------------------------------------------ CODE STARTS HERE ------------------------------------------------ /
-
 // -- WHEN LOADING PAGE --/
-async function initPage() {
-    checkTheme();
-    checkUser();
-    
-    /*if (onlineUser == null) {
-        startPage()
-        checkTheme()
-        console.log("hejsan onlineuser e null")
-    } else {
-        renderTheme(activeTheme)
-        adminPage()
-        console.log("hejsan onlineuser e aktiv")
-    }*/
-} 
 
-function checkUser(){
+function initPage() {
+    getThemes()
+    checkTheme()
+    checkContent()
     let online = JSON.parse(localStorage.getItem("onlineUser"))
 
     if(online){
-        adminView()
+        adminPage()
     } else {
         startPage()
     }
@@ -221,15 +208,21 @@ function checkUser(){
 
 // -- Page for not logged in users --/ 
 function startPage() {
-    checkContent()
     header.append(loginForm)
     main.append(contentContainer)
+    renderContent()
+}
+
+// -- Page for logged in users -- /
+function adminPage() {
+    header.append(onlineBox)
+    viewToggle.innerText = "User View"
+    adminView()
 }
 
 // -- CHECK FOR EXISTING CONTENT, IF NULL, SET PLACEHOLDER-TEXT
 function checkContent(){
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
-
     if(activeContent == null) {
         let placeholderContent = {
             title: "Placeholder Header",
@@ -237,33 +230,34 @@ function checkContent(){
         }
         localStorage.setItem("activeContent", JSON.stringify(placeholderContent))
     }
-    renderContent(activeContent)
+    return activeContent
 }
 
 // -- RENDER CONTENT ON SITE --/
-function renderContent(content) {
+function renderContent() {
+    let content = checkContent()
     h1.innerText = content.title
     p.innerText = content.text
 }
 
 // -- FETCH JSON --//
-async function fetchJSON(url){
+async function fetchThemes(){
     try{
-        let response = await fetch(url)
+        let response = await fetch("./json/themes.json")
         let result = response.json()
         return result
     } catch(err){
         console.error(err)
     }
 }
-getThemes()
+
 // -- SET THEMES OF JSON IN LS --/
 async function getThemes(){
     let themesList = JSON.parse(localStorage.getItem("themes"))
     
     if(themesList == null){
-        let themes = await fetchJSON("./json/themes.json")
-
+        let themes = await fetchThemes()
+        console.log(themes)
         localStorage.setItem("themes", JSON.stringify(themes))
     }
     return themesList
@@ -274,15 +268,12 @@ async function checkTheme(){
     let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
 
     if(activeTheme == null) {
-        let themes = await getThemes()
-        console.log("test",themes)
+        let themes = await fetchThemes()
         let defaultTheme = themes.find(name => name.themeName == "standardTheme");
-        renderTheme(defaultTheme)
         localStorage.setItem("activeTheme", JSON.stringify(defaultTheme))
-    } else {
-        renderTheme(activeTheme)
-    }
-    
+        renderTheme(defaultTheme)
+    } 
+    renderTheme(activeTheme)
 }
 
 // -- RENDER THEME --/ 
@@ -337,13 +328,6 @@ function clearErrorMsg(){
     errorMsg.remove()
 }
 
-/*/ -- Page for logged in users -- /
-function adminPage() {
-    header.append(onlineBox)
-    viewToggle.innerText = "User View"
-    adminView()
-}*/
-
 // -- ADMIN VIEW --/
 function adminView(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
@@ -378,7 +362,7 @@ function userView(){
     editThemeContainer.remove()
     themesDiv.remove()
 
-    checkContent()
+    renderContent()
 
     viewToggle.innerText = "Admin View"
     viewToggle.removeEventListener("click", userView)
@@ -416,6 +400,7 @@ function saveTheme(){
     
     collectedThemes.push(newTheme)
     localStorage.setItem("themes", JSON.stringify(collectedThemes))
+    saveThemeContainer.remove()
     themeList.innerHTML = ""
     themesList()
     renderTheme(newTheme)
@@ -427,7 +412,6 @@ saveContentBtn.addEventListener("click", () => {
         text: getValue(newText)
     }
     localStorage.setItem("activeContent", JSON.stringify(newContent))
-    checkContent()
 })
 
 
@@ -458,6 +442,7 @@ function themesList(){
         deleteThemeBtn.addEventListener("click", () => {
             existingThemes.splice(index, 1)
             localStorage.setItem("themes", JSON.stringify(existingThemes))
+            themeItem.remove()
         })
     })
 
@@ -466,7 +451,6 @@ function themesList(){
 
             if(evt.target.id == theme.themeID){
                 renderTheme(theme)
-                location.reload()
                 localStorage.setItem("activeTheme", JSON.stringify(theme))
             }
         })
