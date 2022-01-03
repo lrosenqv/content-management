@@ -1,16 +1,18 @@
-#root { display: -webkit-box; display: -ms-flexbox; display: flex; position: relative; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; font-family: Arial, Helvetica, sans-serif; height: 100vh; z-index: 1; }
+#root { display: -webkit-box; display: -ms-flexbox; display: flex; position: relative; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; font-family: Arial, Helvetica, sans-serif; min-height: 100vh; z-index: 1; }
 
 #root button { border: none; border-radius: 8px; padding: 0.5rem; cursor: pointer; }
 
-header { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: end; -ms-flex-pack: end; justify-content: flex-end; background-color: thistle; font-size: 0.8rem; padding: 1rem 0; }
+#root button:hover { background-color: #cacaca; }
+
+header { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: end; -ms-flex-pack: end; justify-content: flex-end; font-size: 0.8rem; padding: 1rem 0; }
 
 header #loginForm { -ms-flex-item-align: center; align-self: center; display: -webkit-box; display: -ms-flexbox; display: flex; margin-right: 3rem; -ms-flex-pack: distribute; justify-content: space-around; }
 
 header #loginForm input { margin-right: 0.6rem; }
 
-header #loginForm #loginBtn { background-color: #7e5894; color: white; }
+header #loginForm #loginBtn { background-color: black; color: white; }
 
-header #loginForm #loginBtn:hover { background-color: #573d66; }
+header #loginForm #loginBtn:hover { background-color: #464646; }
 
 header #errorMsg { -webkit-box-ordinal-group: 0; -ms-flex-order: -1; order: -1; -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; margin-right: 1rem; }
 
@@ -28,7 +30,7 @@ main { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-or
 
 main #editContentContainer { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-column-gap: 1rem; column-gap: 1rem; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; width: 100vw; padding: 0 23rem; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
-main #editContentContainer h2 { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; width: 100%; }
+main #editContentContainer h2 { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; width: 100%; margin-top: 2rem; }
 
 main #editContentContainer h3 { text-align: end; font-size: 1rem; -ms-flex-item-align: start; align-self: flex-start; }
 
@@ -54,13 +56,29 @@ main #editThemeContainer #saveEditsBtn { width: 8rem; margin-left: 4rem; }
 
 main #editThemeContainer #saveThemeBtn { width: 8rem; margin-right: 4rem; }
 
-main #themesDiv { padding-top: 2rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; width: 100%; }
+main #editThemeContainer #saveThemeContainer { border: 1px dotted black; background-color: #dadada; width: 20rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; padding: 1rem; margin: 2rem 27rem 0; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
+main #editThemeContainer #saveThemeContainer input { margin-right: 0; width: 70%; }
+
+main #editThemeContainer #saveThemeContainer button { margin-top: 0.7rem; }
+
+main #editThemeContainer #saveThemeContainer #saveThemeBtn2 { background-color: #47494b; color: white; }
+
+main #editThemeContainer #saveThemeContainer #saveThemeBtn2:hover { background-color: #303133; }
+
+main #editThemeContainer #saveThemeContainer #cancelBtn { width: 5rem; }
+
+main #editThemeContainer #saveThemeContainer #cancelBtn:hover { background-color: white; }
+
+main #themesDiv { padding: 3rem 0; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; width: 100%; }
 
 main #themesDiv h2 { margin-top: 0; }
 
 main #themesDiv ul { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-column-gap: 0.7rem; column-gap: 0.7rem; row-gap: 0.7rem; padding: 0; width: 60%; }
 
-main #themesDiv ul li { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: baseline; -ms-flex-align: baseline; align-items: baseline; -webkit-column-gap: 0.3rem; column-gap: 0.3rem; padding: 0.3rem 0.5rem; cursor: pointer; border: 1px solid #727272; border-radius: 25px 25px; }
+main #themesDiv ul li { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: baseline; -ms-flex-align: baseline; align-items: baseline; -webkit-column-gap: 0.3rem; column-gap: 0.3rem; padding: 0.3rem 0.5rem; cursor: pointer; border: 1px solid #e2e2e2; border-radius: 25px 25px; }
+
+main #themesDiv ul li:hover { background-color: #e2e2e2; }
 
 main #themesDiv ul li #colorSwatch { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; width: 1rem; height: 1rem; }
 
@@ -68,7 +86,7 @@ main #themesDiv ul li button { padding: 0.2rem; width: 1.7rem; font-size: 0.8rem
 
 main #themesDiv ul li button:hover { background-color: #e25f5f; }
 
-main #contentContainer { height: 100%; width: 100vw; background-color: white; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; position: absolute; top: 0; z-index: 999; }
+main #contentContainer { height: 100%; width: 100vw; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; position: absolute; top: 0; z-index: 999; }
 
 main #contentContainer h1 { margin-top: 0; }
 

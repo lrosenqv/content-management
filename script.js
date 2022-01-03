@@ -84,6 +84,9 @@ newTitleColour.className = "Coloris"
 let newTextColour = document.createElement("input")
 newTextColour.className = "Coloris"
 
+let newBgColour = document.createElement("input")
+newBgColour.className = "Coloris"
+
 let newAccentColour = document.createElement("input")
 newAccentColour.className = "Coloris"
 
@@ -155,15 +158,18 @@ Coloris({
     el: '.Coloris'
 });
 
-editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
+editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newBgColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
 
     // -- Adding headers to theme editing-tools -- /
-newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
-newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
-newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
+
 newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
+newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
+
+newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
 newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
+newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
 newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
+newBgColour.insertAdjacentHTML("beforebegin", "<h3>Background Colour</h3>")
 newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
 newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
 
@@ -179,33 +185,49 @@ let saveThemeBtn2 = document.createElement("button")
 saveThemeBtn2.innerText = "Save Theme"
 saveThemeBtn2.id = "saveThemeBtn2"
 
-saveThemeContainer.append(newThemeName, saveThemeBtn2)
+let cancelBtn = document.createElement("button")
+cancelBtn.innerText = "Cancel"
+cancelBtn.id = "cancelBtn"
+
+saveThemeContainer.append(newThemeName, saveThemeBtn2, cancelBtn)
 
 // ------------------------------------------------ CODE STARTS HERE ------------------------------------------------ /
 
 // -- WHEN LOADING PAGE --/
 function initPage() {
+    //checkContent()
     checkTheme()
-    let onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
-    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
-    renderTheme(activeTheme)
-    
-    if (onlineUser == null) {
-        startPage()
-        checkContent()
+    //checkUser()
 
+    
+    /*if (onlineUser == null) {
+        startPage()
+        checkTheme()
+        console.log("hejsan onlineuser e null")
     } else {
+        renderTheme(activeTheme)
         adminPage()
-    }
+        console.log("hejsan onlineuser e aktiv")
+    }*/
 } 
+
+function checkUser(){
+    let online = JSON.parse(localStorage.getItem("onlineUser"))
+
+    if(online){
+        adminPage()
+    } else {
+        startPage()
+    }
+}
 
 // -- Page for not logged in users --/ 
 function startPage() {
     header.append(loginForm)
+    main.append(contentContainer)
 }
 
 // -- CHECK FOR EXISTING CONTENT, IF NULL, SET PLACEHOLDER-TEXT
-
 function checkContent(){
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
 
@@ -219,34 +241,21 @@ function checkContent(){
     renderContent(activeContent)
 }
 
-// -- CHECK FOR ACTIVE THEME, IF NULL, SET STANDARD THEME --/
-async function checkTheme(){
-    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
-
-    if(activeTheme == null) {
-        let themes = await getThemes()
-
-        let defaultTheme = themes.find(name => name.themeName == "standardTheme");
-        localStorage.setItem("activeTheme", JSON.stringify(defaultTheme))
-    }
-}
-
 // -- RENDER CONTENT ON SITE --/
 function renderContent(content) {
     h1.innerText = content.title
     p.innerText = content.text
 }
 
-// -- RENDER THEME --/ 
-function renderTheme(theme){
-    h1.style.color = theme.titleColour;
-    h1.style.fontFamily = theme.titleFont;
-    p.style.color = theme.textColour;
-    p.style.fontFamily = theme.textFont;
-    header.style.backgroundColor = theme.accentColour;
-    footer.style.backgroundColor = theme.accentColour;
-    header.style.color = theme.contrastColour;
-    footer.style.color = theme.contrastColour;
+// -- FETCH JSON --//
+async function fetchJSON(url){
+    try{
+        let response = await fetch(url)
+        let result = response.json()
+        return result
+    } catch(err){
+        console.error(err)
+    }
 }
 
 // -- SET THEMES OF JSON IN LS --/
@@ -258,6 +267,33 @@ async function getThemes(){
         localStorage.setItem("themes", JSON.stringify(themes))
     }
     return themesList
+}
+
+// -- CHECK FOR ACTIVE THEME, IF NULL, SET STANDARD THEME --/
+function checkTheme(){
+    let activeTheme = JSON.parse(localStorage.getItem("activeTheme"))
+
+    if(activeTheme == null) {
+        let themes = getThemes()
+
+        let defaultTheme = themes.find(name => name.themeName == "standardTheme");
+        localStorage.setItem("activeTheme", JSON.stringify(defaultTheme))
+    }
+    renderTheme(activeTheme)
+}
+
+// -- RENDER THEME --/ 
+function renderTheme(theme){
+    h1.style.color = theme.titleColour;
+    h1.style.fontFamily = theme.titleFont;
+    p.style.color = theme.textColour;
+    p.style.fontFamily = theme.textFont;
+    main.style.color = theme.textColour;
+    root.style.backgroundColor = theme.backgroundColour;
+    header.style.backgroundColor = theme.accentColour;
+    footer.style.backgroundColor = theme.accentColour;
+    header.style.color = theme.contrastColour;
+    footer.style.color = theme.contrastColour;
 }
 
 // -- GET STUFF FROM LOCAL STORAGE --/
@@ -310,6 +346,7 @@ function adminView(){
     newTitleColour.value = currentTheme.titleColour
     newFontText.value = currentTheme.textFont
     newTextColour.value = currentTheme.textColour
+    newBgColour.value = currentTheme.backgroundColour
     newAccentColour.value = currentTheme.accentColour
     newContrastColour.value = currentTheme.contrastColour
 
@@ -321,6 +358,7 @@ function adminView(){
             titleFont: newFontTitle.value,
             titleColour: newTitleColour.value,
             textFont: newFontText.value,
+            backgroundColour: newBgColour.value,
             textColour: newTextColour.value,
             accentColour: newAccentColour.value,
             contrastColour: newContrastColour.value
@@ -352,8 +390,12 @@ function adminPage() {
 }
 
 function openSaveThemeContainer(){
+    cancelBtn.addEventListener("click", () => {
+        saveThemeContainer.remove()
+    });
+
     saveThemeBtn2.addEventListener("click", saveTheme)
-    editContentContainer.append(saveThemeContainer)
+    editThemeContainer.append(saveThemeContainer)
 }
 
 function saveTheme(){
@@ -366,11 +408,12 @@ function saveTheme(){
         themeID: newID,
         themeName: getValue(newThemeName),
         titleColour: getValue(newTitleColour),
+        titleFont:getValue(newFontTitle),
         textColour: getValue(newTextColour),
+        textFont: getValue(newFontTitle),
+        backgroundColour: getValue(newBgColour),
         accentColour: getValue(newAccentColour),
         contrastColour: getValue(newContrastColour),
-        titleFont:getValue(newFontTitle),
-        textFont: getValue(newFontTitle)
     }
     
     collectedThemes.push(newTheme)
@@ -393,6 +436,7 @@ saveContentBtn.addEventListener("click", () => {
 function userView(){
     editContentContainer.remove()
     editThemeContainer.remove()
+    themesDiv.remove()
 
     checkContent()
 
@@ -442,9 +486,7 @@ function themesList(){
                 localStorage.setItem("activeTheme", JSON.stringify(theme))
             }
         })
-        console.log(evt.target.id);
     })
-
     themesDiv.innerHTML = "<h2>Choose an existing theme</h2>"
     themesDiv.append(themeList)
 }
@@ -461,17 +503,3 @@ let mocklist = [
 ]
 localStorage.setItem("userList", JSON.stringify(mocklist))
 
-
-
-// -- FETCH JSON --//
-async function fetchJSON(url){
-    try{
-        let response = await fetch(url)
-        console.log(response)
-        let result = response.json()
-        console.log(result);
-        return result
-    } catch(err){
-        console.error(err)
-    }
-}
