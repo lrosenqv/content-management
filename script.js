@@ -78,21 +78,23 @@ editThemeContainer.innerHTML = "<h2>Customize Theme</h2>"
   
 let newTitleColour = document.createElement("input")
 newTitleColour.className = "Coloris"
+newTitleColour.id = "newTitleColour"
 
 let newTextColour = document.createElement("input")
 newTextColour.className = "Coloris"
+newTextColour.id = "newTitleColour"
 
 let newBgColour = document.createElement("input")
 newBgColour.className = "Coloris"
+newBgColour.id = "newBgColour"
 
 let newAccentColour = document.createElement("input")
 newAccentColour.className = "Coloris"
+newAccentColour.id = "newAccentColour"
 
 let newContrastColour = document.createElement("input")
 newContrastColour.className = "Coloris"
-
-let inputSwatch = document.createElement("div")
-inputSwatch.id = "inputSwatch"
+newContrastColour.id = "newContrastColour"
 
 let saveEditsBtn = document.createElement("button")
 saveEditsBtn.innerText = "Save Edits"
@@ -126,17 +128,16 @@ let fonts = [
 ]
 
 // -- CREATING SELECT ELEMENTS FOR SELECTING FONT --/
-fonts.forEach((font) => {
-    let aFont = document.createElement("option")
-    aFont.innerText = font
-    newFontTitle.append(aFont)
-})
+function renderFonts(fontList){
+    fonts.forEach((font) => {
+        let aFont = document.createElement("option")
+        aFont.innerText = font
+        fontList.append(aFont)
+    })
+}
 
-fonts.forEach((font) => {
-    let aFont = document.createElement("option")
-    aFont.innerText = font
-    newFontText.append(aFont)
-})
+renderFonts(newFontTitle)
+renderFonts(newFontText)
 
 // -- COLOR PICKER --/
 Coloris({
@@ -163,6 +164,7 @@ Coloris({
     el: '.Coloris'
 });
 
+let colourInputs = [newTitleColour, newTextColour, newBgColour, newAccentColour, newContrastColour]
 editThemeContainer.append(newFontTitle, newFontText, newTitleColour, newTextColour, newBgColour, newAccentColour, newContrastColour, randomColourBtn, saveEditsBtn, saveThemeBtn, themesDiv)
 
     // -- Adding headers to theme editing-tools -- /
@@ -262,7 +264,6 @@ async function getThemes(){
     
     if(themesList == null){
         let themes = await fetchThemes()
-        console.log(themes)
         localStorage.setItem("themes", JSON.stringify(themes))
     }
     return themesList
@@ -335,34 +336,26 @@ function showCurrentValue(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
     let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
     
-    newTitle.value = currentValues.title
-    newText.value = currentValues.text
-    newFontTitle.value = currentTheme.titleFont
-    newTitleColour.value = currentTheme.titleColour
-    newFontText.value = currentTheme.textFont
-    newTextColour.value = currentTheme.textColour
-    newBgColour.value = currentTheme.backgroundColour
-    newAccentColour.value = currentTheme.accentColour
-    newContrastColour.value = currentTheme.contrastColour
-}
-
-function randomColor(){
-    const randomColor = Math.floor(Math.random()*16777215).toString(16);
-    generateColour = "#" + randomColor;
-    return generateColour
+    let currentVal = [
+        newTitle.value = currentValues.title,
+        newText.value = currentValues.text,
+        newFontTitle.value = currentTheme.titleFont,
+        newFontText.value = currentTheme.textFont,
+        newTitleColour.value = currentTheme.titleColour,
+        newTextColour.value = currentTheme.textColour,
+        newBgColour.value = currentTheme.backgroundColour,
+        newAccentColour.value = currentTheme.accentColour,
+        newContrastColour.value = currentTheme.contrastColour
+    ]
+    currentVal;
 }
 
 randomColourBtn.addEventListener("click", () => {
-    let capture = [
-        newTitleColour.value = randomColor(),
-        newTextColour.value = randomColor(),
-        newBgColour.value = randomColor(),
-        newAccentColour.value = randomColor(),
-        newContrastColour.value = randomColor() 
-    ]
-    console.log(capture)
+    colourInputs.forEach((input) => {
+        let randomColour = Math.floor(Math.random()*16777215).toString(16);
+        input.value = "#" + randomColour
+    })
 })
-
 
 // -- ADMIN VIEW --/
 function adminView(){
