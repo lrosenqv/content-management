@@ -227,6 +227,41 @@ function adminPage() {
     adminView()
 }
 
+// Arrays och logg till localStorage
+let mocklist = [
+    {username : "admin", password : "admin"},
+]
+localStorage.setItem("userList", JSON.stringify(mocklist))
+
+// -- GET STUFF FROM LOCAL STORAGE --/
+function getUsersFromLS() {
+    let collectedUserList = localStorage.getItem("userList");
+    let userList = []
+
+    if(collectedUserList) {
+        userList = JSON.parse(collectedUserList);
+        return userList
+    }
+}
+
+// -- LOG IN & USER VALIDATION --/
+loginBtn.addEventListener('click', validateUser)
+function validateUser() {
+    let userList = getUsersFromLS();
+    let userInput = userNameInput.value;
+    let passInput = passwordInput.value;
+    let userOk = userList.find(userList => userList.username == userInput);
+    let passwordOk = userList.find(userList => userList.password == passInput);
+
+    if(!userOk || !passwordOk) {
+        header.append(errorMsg)
+    } else if(userOk && passwordOk){
+        let onlineUser = {username: userInput, status: "online" }
+        localStorage.setItem("onlineUser", JSON.stringify(onlineUser))
+        adminPage()
+    } 
+}
+
 // -- CHECK FOR EXISTING CONTENT, IF NULL, SET PLACEHOLDER-TEXT
 function checkContent(){
     let activeContent = JSON.parse(localStorage.getItem("activeContent"))
@@ -296,58 +331,20 @@ function renderTheme(theme){
     footer.style.color = theme.contrastColour;
 }
 
-// -- GET STUFF FROM LOCAL STORAGE --/
-function getUsersFromLS() {
-    let collectedUserList = localStorage.getItem("userList");
-    let userList = []
-
-    if(collectedUserList) {
-        userList = JSON.parse(collectedUserList);
-        return userList
-    }
-}
-
-// -- LOG IN & USER VALIDATION --/
-loginBtn.addEventListener('click', validateUser)
-function validateUser() {
-    let userList = getUsersFromLS();
-    let userInput = userNameInput.value;
-    let passInput = passwordInput.value;
-    let userOk = userList.find(userList => userList.username == userInput);
-    let passwordOk = userList.find(userList => userList.password == passInput);
-    let timeout;
-
-    if(!userOk || !passwordOk) {
-        header.append(errorMsg)
-        timeout = setTimeout(clearErrorMsg, 2000)
-    } else if(userOk && passwordOk){
-        let onlineUser = {username: userInput, status: "online" }
-        localStorage.setItem("onlineUser", JSON.stringify(onlineUser))
-        adminPage()
-    } 
-}
-
-// -- CLEAR ERROR MESSAGE WHEN LOGIN DETAILS IS INCORRECT --/
-function clearErrorMsg(){
-    errorMsg.remove()
-}
-
 function showCurrentValue(){
     let currentValues = JSON.parse(localStorage.getItem("activeContent"))
     let currentTheme = JSON.parse(localStorage.getItem("activeTheme"))
     
-    let currentVal = [
-        newTitle.value = currentValues.title,
-        newText.value = currentValues.text,
-        newFontTitle.value = currentTheme.titleFont,
-        newFontText.value = currentTheme.textFont,
-        newTitleColour.value = currentTheme.titleColour,
-        newTextColour.value = currentTheme.textColour,
-        newBgColour.value = currentTheme.backgroundColour,
-        newAccentColour.value = currentTheme.accentColour,
-        newContrastColour.value = currentTheme.contrastColour
-    ]
-    currentVal;
+    newTitle.value = currentValues.title,
+    newText.value = currentValues.text,
+        
+    newFontTitle.value = currentTheme.titleFont,
+    newFontText.value = currentTheme.textFont,
+    newTitleColour.value = currentTheme.titleColour,
+    newTextColour.value = currentTheme.textColour,
+    newBgColour.value = currentTheme.backgroundColour,
+    newAccentColour.value = currentTheme.accentColour,
+    newContrastColour.value = currentTheme.contrastColour
 }
 
 randomColourBtn.addEventListener("click", () => {
@@ -361,7 +358,6 @@ randomColourBtn.addEventListener("click", () => {
 function adminView(){
     themeList.innerHTML = ""
     showCurrentValue()
-
     themesList()
 
     saveEditsBtn.addEventListener("click", () => {
@@ -379,13 +375,13 @@ function adminView(){
         renderTheme(themeChanges)
     });
 
-    saveThemeBtn.addEventListener("click", openSaveThemeContainer)
+    contentContainer.remove()
     header.append(onlineBox)
     main.append(editContentContainer, editThemeContainer, themesDiv)
-    contentContainer.remove()
 
     viewToggle.innerText = "User View"
     viewToggle.addEventListener("click", userView)
+    saveThemeBtn.addEventListener("click", openSaveThemeContainer)
 }
 
 // -- VIEW TO SHOW ALL THEME AND CONTENT EDITS --/
@@ -393,15 +389,23 @@ function userView(){
     editContentContainer.remove()
     editThemeContainer.remove()
     themesDiv.remove()
+    main.append(contentContainer)
 
     renderContent()
 
     viewToggle.innerText = "Admin View"
     viewToggle.removeEventListener("click", userView)
     viewToggle.addEventListener("click", adminView)
-
-    main.append(contentContainer)
 }
+
+// -- Save new Content --/
+saveContentBtn.addEventListener("click", () => {
+    let newContent = {
+        title: getValue(newTitle),
+        text: getValue(newText)
+    }
+    localStorage.setItem("activeContent", JSON.stringify(newContent))
+})
 
 // -- Open container for adding theme name --/
 function openSaveThemeContainer(){
@@ -434,20 +438,13 @@ function saveTheme(){
     collectedThemes.push(newTheme)
     localStorage.setItem("themes", JSON.stringify(collectedThemes))
     localStorage.setItem("activeTheme", JSON.stringify(newTheme))
-    saveThemeContainer.remove()
     themeList.innerHTML = ""
-    themesList()
+    
     renderTheme(newTheme)
+    themesList()
+    
+    saveThemeContainer.remove()
 }
-
-saveContentBtn.addEventListener("click", () => {
-    let newContent = {
-        title: getValue(newTitle),
-        text: getValue(newText)
-    }
-    localStorage.setItem("activeContent", JSON.stringify(newContent))
-})
-
 
 // -- GET VALUES FROM INPUT FIELDS --/
 function getValue(input){
@@ -473,6 +470,7 @@ function themesList(){
         themeItem.append(swatch, deleteThemeBtn)
         themeList.append(themeItem)
 
+        // -- Delete theme from themeList
         deleteThemeBtn.addEventListener("click", () => {
             existingThemes.splice(index, 1)
             localStorage.setItem("themes", JSON.stringify(existingThemes))
@@ -480,9 +478,9 @@ function themesList(){
         })
     })
 
+    // -- Set theme from themeList
     themeList.addEventListener("click", (evt) => {
         existingThemes.find((theme) => {
-
             if(evt.target.id == theme.themeID){
                 renderTheme(theme)
                 localStorage.setItem("activeTheme", JSON.stringify(theme))
@@ -502,10 +500,3 @@ logoutBtn.addEventListener("click", () => {
     themesDiv.remove()
     startPage()
 })
-
-// Arrays och logg till localStorage
-let mocklist = [
-    {username : "admin", password : "admin"},
-]
-localStorage.setItem("userList", JSON.stringify(mocklist))
-

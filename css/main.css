@@ -57,7 +57,7 @@ main #editThemeContainer #saveEditsBtn { width: 8rem; margin-left: 4rem; }
 
 main #editThemeContainer #saveThemeBtn { width: 8rem; margin-right: 4rem; }
 
-main #editThemeContainer #randomColourBtn { width: 17rem; margin-left: 20rem; margin-right: 20rem; padding: 0.5rem; }
+main #editThemeContainer #randomColourBtn { width: 17rem; margin-left: 26rem; margin-right: 26rem; padding: 0.5rem; }
 
 main #editThemeContainer #saveThemeContainer { border: 1px dotted black; background-color: rgba(22, 22, 22, 0.116); width: 20rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; -webkit-box-align: center; -ms-flex-align: center; align-items: center; padding: 1rem; margin: 2rem 27rem 0; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
