@@ -1,5 +1,10 @@
 @import url(/css/normalize.css);
 
+body{
+    margin:0;
+    padding:0;
+}
+
 #root {
     display:flex;
     position:relative;
@@ -160,12 +165,12 @@ main {
 
         #saveEditsBtn {
             width:8rem;
-            margin-left:4rem;
+            margin-left:26rem;
         }
 
         #saveThemeBtn {
             width:8rem;
-            margin-right:4rem;
+            margin-right:26rem;
         }
 
         #randomColourBtn{
