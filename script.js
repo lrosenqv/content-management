@@ -91,6 +91,9 @@ newAccentColour.className = "Coloris"
 let newContrastColour = document.createElement("input")
 newContrastColour.className = "Coloris"
 
+let inputSwatch = document.createElement("div")
+inputSwatch.id = "inputSwatch"
+
 let saveEditsBtn = document.createElement("button")
 saveEditsBtn.innerText = "Save Edits"
 saveEditsBtn.id = "saveEditsBtn"
@@ -98,6 +101,10 @@ saveEditsBtn.id = "saveEditsBtn"
 let saveThemeBtn = document.createElement("button")
 saveThemeBtn.innerText = "Save as Theme"
 saveThemeBtn.id = "saveThemeBtn"
+
+let randomColourBtn = document.createElement("button")
+randomColourBtn.innerText = "Generate Random Colours"
+randomColourBtn.id = "randomColourBtn"
 
 // -- DIV WITH SAVED THEMES TO CHOOSE FROM --/
 let themesDiv = document.createElement("div")
@@ -156,15 +163,15 @@ Coloris({
     el: '.Coloris'
 });
 
-editThemeContainer.append(newFontTitle, newTitleColour, newFontText, newTextColour, newBgColour, newAccentColour, newContrastColour, saveEditsBtn, saveThemeBtn, themesDiv)
+editThemeContainer.append(newFontTitle, newFontText, newTitleColour, newTextColour, newBgColour, newAccentColour, newContrastColour, randomColourBtn, saveEditsBtn, saveThemeBtn, themesDiv)
 
     // -- Adding headers to theme editing-tools -- /
 newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
 newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
 
 newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
-newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
 newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
+newTitleColour.insertAdjacentHTML("beforebegin", "<h3>Title Colour</h3>")
 newTextColour.insertAdjacentHTML("beforebegin", "<h3>Text Colour</h3>")
 newBgColour.insertAdjacentHTML("beforebegin", "<h3>Background Colour</h3>")
 newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
@@ -339,6 +346,24 @@ function showCurrentValue(){
     newContrastColour.value = currentTheme.contrastColour
 }
 
+function randomColor(){
+    const randomColor = Math.floor(Math.random()*16777215).toString(16);
+    generateColour = "#" + randomColor;
+    return generateColour
+}
+
+randomColourBtn.addEventListener("click", () => {
+    let capture = [
+        newTitleColour.value = randomColor(),
+        newTextColour.value = randomColor(),
+        newBgColour.value = randomColor(),
+        newAccentColour.value = randomColor(),
+        newContrastColour.value = randomColor() 
+    ]
+    console.log(capture)
+})
+
+
 // -- ADMIN VIEW --/
 function adminView(){
     themeList.innerHTML = ""
@@ -357,7 +382,6 @@ function adminView(){
             accentColour: newAccentColour.value,
             contrastColour: newContrastColour.value
         }
-
         localStorage.setItem("activeTheme", JSON.stringify(themeChanges))
         renderTheme(themeChanges)
     });

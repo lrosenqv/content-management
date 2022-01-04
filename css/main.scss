@@ -153,8 +153,13 @@ main {
             margin-right:30%;
         }
 
+        #inputSwatch{
+            width:1rem;
+            height:1rem;
+        }
+
         button{
-            margin-top: 1.5rem;
+            margin-top: 1rem;
             width:8rem;
         }
 
@@ -166,6 +171,13 @@ main {
         #saveThemeBtn {
             width:8rem;
             margin-right:4rem;
+        }
+
+        #randomColourBtn{
+            width:17rem;
+            margin-left:20rem;
+            margin-right:20rem;
+            padding: 0.5rem;
         }
 
         #saveThemeContainer{
