@@ -224,7 +224,8 @@ main {
             grid-column: 2/span 8;
             display:flex;
             flex-wrap: wrap;
-            justify-content: space-evenly;
+            justify-content: center;
+            column-gap: 0.5rem;
             padding-top:0.5rem;
 
             button{
