@@ -145,6 +145,7 @@ main {
             border-radius: 0.5rem 0.5rem;
             box-sizing: border-box;
             padding:0.5rem 1rem;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         #saveContentBtn {
@@ -185,7 +186,7 @@ main {
             border:none;
             border-radius: 0.5rem 0.5rem;
             height:2.25rem;
-            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1rem;
 
             div{
                 margin-left:0;
@@ -308,6 +309,7 @@ main {
             padding:0;
             margin:0;
             color:white;
+            font-size: 1rem;
 
             li{
                 display: flex;
@@ -368,7 +370,7 @@ footer {
 
     p{
         align-self: center;
-        font-size: 1.3rem;
+        font-size: 1.1rem;
     }
 }
 
