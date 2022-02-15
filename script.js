@@ -5,7 +5,6 @@ let root = document.getElementById("root")
 let header = document.getElementById("siteHeader")
 let main = document.getElementById("siteMain")
 let footer = document.getElementById("siteFooter")
-footer.innerHTML = "This is a footer"
 
 // -- LOGIN FORM --/
 let loginForm = document.createElement("form")
@@ -105,7 +104,7 @@ saveThemeBtn.innerText = "Save as Theme"
 saveThemeBtn.id = "saveThemeBtn"
 
 let randomColourBtn = document.createElement("button")
-randomColourBtn.innerText = "Generate Random Colours"
+randomColourBtn.innerText = "Random Colours"
 randomColourBtn.id = "randomColourBtn"
 
 // -- DIV WITH SAVED THEMES TO CHOOSE FROM --/
@@ -164,12 +163,24 @@ Coloris({
     el: '.Coloris'
 });
 
+let editFontsDiv = document.createElement("div")
+editFontsDiv.id = "editFontsDiv"
+editFontsDiv.append(newFontTitle, newFontText)
+
+let editColoursDiv = document.createElement("div")
+editColoursDiv.id = "editColoursDiv"
+editColoursDiv.append(newTitleColour, newTextColour, newBgColour, newAccentColour, newContrastColour)
+
+let editButtonsDiv = document.createElement("div")
+editButtonsDiv.id = "editButtonsDiv"
+editButtonsDiv.append(randomColourBtn, saveThemeBtn, saveEditsBtn)
+
 let colourInputs = [newTitleColour, newTextColour, newBgColour, newAccentColour, newContrastColour]
-editThemeContainer.append(newFontTitle, newFontText, newTitleColour, newTextColour, newBgColour, newAccentColour, newContrastColour, randomColourBtn, saveEditsBtn, saveThemeBtn, themesDiv)
+editThemeContainer.append(editFontsDiv, editColoursDiv, editButtonsDiv, themesDiv)
 
     // -- Adding headers to theme editing-tools -- /
-newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
-newTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title</h3>")
+    newTitle.insertAdjacentHTML("beforebegin", "<h3 id='newTitleH3'>Edit Title</h3>")
+    newText.insertAdjacentHTML("beforebegin", "<h3 id='newTextH3'>Edit Text</h3>")
 
 newFontTitle.insertAdjacentHTML("beforebegin", "<h3>Edit Title Font</h3>")
 newFontText.insertAdjacentHTML("beforebegin", "<h3>Edit Text Font</h3>")
@@ -196,6 +207,9 @@ cancelBtn.innerText = "Cancel"
 cancelBtn.id = "cancelBtn"
 
 saveThemeContainer.append(newThemeName, saveThemeBtn2, cancelBtn)
+
+let themeContainerInputs = editThemeContainer.getElementsByTagName("input").length;
+let themeContainerSelects = editThemeContainer.getElementsByTagName("select").length;
 
 // ------------------------------------------------ CODE STARTS HERE ------------------------------------------------ /
 // -- WHEN LOADING PAGE --/
@@ -229,7 +243,7 @@ function adminPage() {
 
 // Arrays och logg till localStorage
 let mocklist = [
-    {username : "admin", password : "admin"},
+    {username : "admin", password : "admin2"},
 ]
 localStorage.setItem("userList", JSON.stringify(mocklist))
 
@@ -329,6 +343,16 @@ function renderTheme(theme){
     footer.style.backgroundColor = theme.accentColour;
     header.style.color = theme.contrastColour;
     footer.style.color = theme.contrastColour;
+
+    newTitle.style.color = theme.textColour;
+    newText.style.color = theme.textColour;
+    newFontTitle.style.color = theme.textColour;
+    newFontText.style.color = theme.textColour;
+
+    let x = editThemeContainer.getElementsByTagName("input");
+    for (let i = 0; i < x.length; i++) {
+        x[i].style.color = theme.textColour;
+    }
 }
 
 function showCurrentValue(){
@@ -487,7 +511,7 @@ function themesList(){
             }
         })
     })
-    themesDiv.innerHTML = "<h2>Choose an existing theme</h2>"
+    themesDiv.innerHTML = "<h2>Choose existing theme</h2>"
     themesDiv.append(themeList)
 }
 
