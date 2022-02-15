@@ -190,7 +190,6 @@ newBgColour.insertAdjacentHTML("beforebegin", "<h3>Background Colour</h3>")
 newAccentColour.insertAdjacentHTML("beforebegin", "<h3>Accent Colour</h3>")
 newContrastColour.insertAdjacentHTML("beforebegin", "<h3>Accent-text Colour</h3>")
 
-
 //-- Pop Up save new Theme --/
 let saveThemeContainer = document.createElement("div")
 saveThemeContainer.id = "saveThemeContainer"
