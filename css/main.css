@@ -47,7 +47,7 @@ main #editContentContainer #newTitle { -ms-grid-row: 3; grid-row: 3; -ms-grid-co
 
 main #editContentContainer #newTitle div { text-align: start; }
 
-main #editContentContainer #newText { -ms-grid-row: 5; grid-row: 5; -ms-grid-column: 2; -ms-grid-column-span: 8; grid-column: 2/ span 8; width: 100%; height: 15rem; border: none; background-color: rgba(189, 189, 189, 0.158); border-radius: 0.5rem 0.5rem; -webkit-box-sizing: border-box; box-sizing: border-box; padding: 0.5rem 1rem; }
+main #editContentContainer #newText { -ms-grid-row: 5; grid-row: 5; -ms-grid-column: 2; -ms-grid-column-span: 8; grid-column: 2/ span 8; width: 100%; height: 15rem; border: none; background-color: rgba(189, 189, 189, 0.158); border-radius: 0.5rem 0.5rem; -webkit-box-sizing: border-box; box-sizing: border-box; padding: 0.5rem 1rem; font-family: Arial, Helvetica, sans-serif; }
 
 main #editContentContainer #saveContentBtn { -ms-grid-row: 6; grid-row: 6; -ms-grid-column: 4; -ms-grid-column-span: 4; grid-column: 4/ span 4; -ms-grid-column-align: center; justify-self: center; margin-top: 1rem; margin-bottom: 1.5rem; padding: 0.5rem 1rem; background-color: #080808; color: #e4e4e4; }
 
@@ -57,7 +57,7 @@ main #editThemeContainer h2 { -ms-grid-row: 1; grid-row: 1; -ms-grid-column: 3; 
 
 main #editThemeContainer h3 { margin-bottom: 4px; margin-top: 8px; font-size: 0.9rem; }
 
-main #editThemeContainer select, main #editThemeContainer input { width: 45%; padding-left: 0.5rem; -webkit-box-sizing: border-box; box-sizing: border-box; background-color: rgba(189, 189, 189, 0.158); border: none; border-radius: 0.5rem 0.5rem; height: 2.25rem; font-family: Arial, Helvetica, sans-serif; }
+main #editThemeContainer select, main #editThemeContainer input { width: 45%; padding-left: 0.5rem; -webkit-box-sizing: border-box; box-sizing: border-box; background-color: rgba(189, 189, 189, 0.158); border: none; border-radius: 0.5rem 0.5rem; height: 2.25rem; font-size: 1rem; }
 
 main #editThemeContainer select div, main #editThemeContainer input div { margin-left: 0; }
 
@@ -93,7 +93,7 @@ main #themesDiv { display: -ms-grid; display: grid; -ms-grid-columns: (1fr)[10];
 
 main #themesDiv h2 { -ms-grid-row: 1; grid-row: 1; -ms-grid-column: 2; -ms-grid-column-span: 8; grid-column: 2 /span 8; margin-top: 0; margin-bottom: 1rem; text-align: center; }
 
-main #themesDiv ul { -ms-grid-row: 2; grid-row: 2; -ms-grid-column: 2; -ms-grid-column-span: 8; grid-column: 2/span 8; list-style-type: none; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; row-gap: 0.5rem; -webkit-column-gap: 0.5rem; column-gap: 0.5rem; padding: 0; margin: 0; color: white; }
+main #themesDiv ul { -ms-grid-row: 2; grid-row: 2; -ms-grid-column: 2; -ms-grid-column-span: 8; grid-column: 2/span 8; list-style-type: none; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; row-gap: 0.5rem; -webkit-column-gap: 0.5rem; column-gap: 0.5rem; padding: 0; margin: 0; color: white; font-size: 1rem; }
 
 main #themesDiv ul li { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-column-gap: 3px; column-gap: 3px; padding: 0.3rem 0.5rem; cursor: pointer; background-color: #e4e4e4; color: black; border-radius: 25px 25px; }
 
@@ -113,7 +113,7 @@ main #contentContainer p { text-align: center; }
 
 footer { min-height: 20vh; background-color: thistle; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
 
-footer p { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; font-size: 1.3rem; }
+footer p { -ms-flex-item-align: center; -ms-grid-row-align: center; align-self: center; font-size: 1.1rem; }
 
 .coloris { width: 4rem; height: 1.5rem; background-color: white; }
 /*# sourceMappingURL=main.css.map */
