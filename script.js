@@ -243,7 +243,7 @@ function adminPage() {
 
 // Arrays och logg till localStorage
 let mocklist = [
-    {username : "admin", password : "admin2"},
+    {username : "admin", password : "admin"},
 ]
 localStorage.setItem("userList", JSON.stringify(mocklist))
 
